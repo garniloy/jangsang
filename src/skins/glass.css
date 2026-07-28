@@ -1,0 +1,178 @@
+/* ============================================================
+   CREATIVE TOOLKIT — DESIGN PATTERN : GLASS (glassmorphism)
+   Responsabilité UNIQUE de ce fichier : l'APPARENCE des
+   composants (couleur, transparence, flou, typographie
+   identitaire). Aucun spacing/taille/layout ici — c'est le rôle
+   exclusif de reset_layout_framework.css, chargé AVANT ce fichier.
+
+   Philosophie GLASS : couches de verre dépoli sur un fond vivant
+   dégradé. Le verre n'est PAS un blanc neutre universel : sa
+   teinte de fond ET son "verre" (translucidité) sont tous deux
+   dérivés de la palette de marque, sinon deux projets avec des
+   palettes différentes produisent un glassmorphism identique —
+   c'est exactement le défaut que ce fichier corrige.
+
+   ------------------------------------------------------------
+   COMMENT RE-SKINNER : modifie uniquement le bloc PALETTE.
+   Tout le reste (dégradé de fond, verre, composants) en dérive
+   via color-mix(). Depuis un stylesheet projet chargé APRÈS ce
+   fichier : [data-style="glass"] { --palette-primary: #...; }
+   ============================================================ */
+
+
+/* ============================================================
+   1. PALETTE — INPUT PROJET (seule zone à modifier)
+   ============================================================ */
+
+[data-style="glass"] {
+  --palette-primary:   #6366F1;  /* couleur de marque — dégradé, verre teinté */
+  --palette-secondary: #14B8A6;  /* couleur d'accent — deuxième teinte        */
+  --palette-neutral:   #64748B;  /* teinte de référence pour les gris/texte   */
+  --palette-success:   #22C55E;
+  --palette-danger:    #EF4444;
+  --palette-warning:   #F59E0B;
+  --palette-info:      #0EA5E9;
+
+  --font-display: "SF Pro Display", -apple-system, var(--font-sans);
+
+  /* -- Échelles dérivées -- */
+  --primary-100: color-mix(in srgb, var(--palette-primary) 15%, white);
+  --primary-200: color-mix(in srgb, var(--palette-primary) 30%, white);
+  --primary-300: color-mix(in srgb, var(--palette-primary) 45%, white);
+  --primary-500: var(--palette-primary);
+  --primary-800: color-mix(in srgb, var(--palette-primary) 65%, black);
+  --primary-900: color-mix(in srgb, var(--palette-primary) 55%, black);
+
+  --secondary-200: color-mix(in srgb, var(--palette-secondary) 30%, white);
+  --secondary-300: color-mix(in srgb, var(--palette-secondary) 45%, white);
+  --secondary-500: var(--palette-secondary);
+  --secondary-800: color-mix(in srgb, var(--palette-secondary) 65%, black);
+  --secondary-900: color-mix(in srgb, var(--palette-secondary) 55%, black);
+
+  --gray-600: color-mix(in srgb, var(--palette-neutral) 85%, black);
+
+  --success-300: color-mix(in srgb, var(--palette-success) 45%, white);
+  --danger-300:  color-mix(in srgb, var(--palette-danger) 45%, white);
+  --warning-300: color-mix(in srgb, var(--palette-warning) 45%, white);
+  --info-300:    color-mix(in srgb, var(--palette-info) 45%, white);
+}
+
+/* -- Le "verre" lui-même : translucide, mais teinté par la marque -- */
+[data-style="glass"][data-mode="light"] {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--primary-300)   80%, white) 0%,
+    color-mix(in srgb, var(--secondary-300) 60%, white) 50%,
+    color-mix(in srgb, var(--primary-200)   70%, white) 100%);
+  --glass-bg:      color-mix(in srgb, color-mix(in srgb, var(--primary-200) 35%, white) 30%, transparent);
+  --glass-bg-hover:color-mix(in srgb, color-mix(in srgb, var(--primary-200) 35%, white) 45%, transparent);
+  --glass-border:  color-mix(in srgb, white 55%, var(--primary-300) 15%);
+  --glass-blur:    var(--blur-md);
+  --glass-text:    color-mix(in srgb, var(--primary-900) 85%, black 10%);
+  --glass-text-2:  color-mix(in srgb, var(--primary-900) 55%, transparent);
+  --glass-shadow:  0 4px 24px color-mix(in srgb, var(--primary-900) 12%, transparent), inset 0 1px 0 rgba(255,255,255,.4);
+}
+[data-style="glass"][data-mode="dark"] {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--primary-900)   90%, #000) 0%,
+    color-mix(in srgb, var(--secondary-900) 70%, #000) 50%,
+    color-mix(in srgb, var(--primary-800)   80%, #000) 100%);
+  --glass-bg:      color-mix(in srgb, color-mix(in srgb, var(--primary-300) 25%, white) 8%, transparent);
+  --glass-bg-hover:color-mix(in srgb, color-mix(in srgb, var(--primary-300) 25%, white) 16%, transparent);
+  --glass-border:  color-mix(in srgb, white 18%, var(--primary-300) 10%);
+  --glass-blur:    var(--blur-md);
+  --glass-text:    rgba(255,255,255,.92);
+  --glass-text-2:  color-mix(in srgb, var(--primary-100) 45%, rgba(255,255,255,.55));
+  --glass-shadow:  0 4px 24px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+
+/* ============================================================
+   2. RENDU VISUEL — GLASS
+   Backdrop-filter partout où une surface "flotte" au-dessus du
+   dégradé — c'est ce qui fait le glassmorphism, pas juste la
+   transparence seule.
+   ============================================================ */
+
+[data-style="glass"] { font-family: var(--font-display); }
+[data-style="glass"] ::selection { background: var(--glass-border); color: var(--glass-text); }
+
+/* Surface */
+[data-style="glass"] .surface { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)) saturate(160%); -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%); border: 1px solid var(--glass-border); border-radius: var(--radius-2xl); box-shadow: var(--glass-shadow); }
+[data-style="glass"] .surface:hover { background: var(--glass-bg-hover); }
+
+/* Texte */
+[data-style="glass"] .text-heading { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--glass-text); line-height: var(--leading-tight); }
+[data-style="glass"] .text-body    { color: var(--glass-text-2); }
+[data-style="glass"] .text-label   { text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--glass-text-2); }
+[data-style="glass"] .text-primary { color: var(--glass-text); }
+[data-style="glass"] .text-muted   { color: var(--glass-text-2); }
+[data-style="glass"] .text-brand   { color: var(--primary-500); }
+[data-style="glass"] .text-accent  { color: var(--secondary-500); }
+[data-style="glass"] .text-success { color: var(--success-300); }
+[data-style="glass"] .text-danger  { color: var(--danger-300); }
+[data-style="glass"] .text-warning { color: var(--warning-300); }
+[data-style="glass"] .text-info    { color: var(--info-300); }
+
+/* Boutons */
+[data-style="glass"] .btn              { border-radius: var(--radius-xl); backdrop-filter: blur(var(--blur-sm)); -webkit-backdrop-filter: blur(var(--blur-sm)); transition: var(--transition-all); }
+[data-style="glass"] .btn-primary      { background: var(--glass-bg-hover); color: var(--glass-text); border: 1px solid var(--glass-border); box-shadow: 0 2px 8px color-mix(in srgb, var(--primary-900) 10%, transparent), inset 0 1px 0 rgba(255,255,255,.5); }
+[data-style="glass"] .btn-primary:hover { background: color-mix(in srgb, var(--glass-bg-hover) 70%, var(--primary-300) 20%); }
+[data-style="glass"] .btn-brand        { background: color-mix(in srgb, var(--primary-500) 70%, transparent); color: #fff; border: 1px solid color-mix(in srgb, var(--primary-300) 50%, transparent); backdrop-filter: blur(var(--blur-sm)); }
+[data-style="glass"] .btn-brand:hover  { background: color-mix(in srgb, var(--primary-500) 85%, transparent); }
+[data-style="glass"] .btn-secondary    { background: transparent; color: var(--glass-text); border: 1px solid var(--glass-border); }
+[data-style="glass"] .btn-secondary:hover { background: var(--glass-bg); }
+[data-style="glass"] .btn-ghost        { background: transparent; color: var(--glass-text-2); }
+[data-style="glass"] .btn-ghost:hover  { color: var(--glass-text); background: var(--glass-bg); }
+[data-style="glass"] .btn-danger       { background: color-mix(in srgb, var(--palette-danger) 70%, transparent); color: #fff; border: 1px solid color-mix(in srgb, var(--danger-300) 50%, transparent); }
+
+/* Input */
+[data-style="glass"] .input            { background: var(--glass-bg); backdrop-filter: blur(var(--blur-sm)); -webkit-backdrop-filter: blur(var(--blur-sm)); border: 1px solid var(--glass-border); border-radius: var(--radius-xl); color: var(--glass-text); transition: var(--transition-all); }
+[data-style="glass"] .input::placeholder { color: var(--glass-text-2); }
+[data-style="glass"] .input:focus      { outline: none; border-color: color-mix(in srgb, var(--primary-300) 70%, white); box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-300) 25%, transparent), inset 0 1px 0 rgba(255,255,255,.3); }
+
+/* Icônes */
+[data-style="glass"] .icon             { color: var(--glass-text-2); }
+[data-style="glass"] .icon-brand       { color: var(--primary-500); }
+[data-style="glass"] .icon-accent      { color: var(--secondary-500); }
+
+/* Badges */
+[data-style="glass"] .badge            { border-radius: var(--radius-full); background: var(--glass-bg); backdrop-filter: blur(var(--blur-sm)); -webkit-backdrop-filter: blur(var(--blur-sm)); border: 1px solid var(--glass-border); color: var(--glass-text); }
+[data-style="glass"] .badge-primary    { border-color: color-mix(in srgb, var(--primary-300)   55%, transparent); color: color-mix(in srgb, var(--primary-200)   90%, white); }
+[data-style="glass"] .badge-secondary  { border-color: color-mix(in srgb, var(--secondary-300) 55%, transparent); color: color-mix(in srgb, var(--secondary-200) 90%, white); }
+[data-style="glass"] .badge-success    { border-color: color-mix(in srgb, var(--success-300) 50%, transparent); color: var(--success-300); }
+[data-style="glass"] .badge-danger     { border-color: color-mix(in srgb, var(--danger-300) 50%, transparent);  color: var(--danger-300); }
+[data-style="glass"] .badge-warning    { border-color: color-mix(in srgb, var(--warning-300) 50%, transparent); color: var(--warning-300); }
+[data-style="glass"] .badge-info       { border-color: color-mix(in srgb, var(--info-300) 50%, transparent);    color: var(--info-300); }
+
+/* Modal */
+[data-style="glass"] .modal            { background: var(--glass-bg); backdrop-filter: blur(var(--blur-lg)) saturate(160%); -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(160%); border: 1px solid var(--glass-border); border-radius: var(--radius-2xl); box-shadow: var(--glass-shadow); }
+[data-style="glass"] .overlay          { position: fixed; inset: 0; background: color-mix(in srgb, var(--primary-900) 35%, black 40%); z-index: var(--z-overlay); backdrop-filter: blur(var(--blur-sm)); -webkit-backdrop-filter: blur(var(--blur-sm)); }
+
+/* Dividers */
+[data-style="glass"] .divider          { height: 1px; background: var(--glass-border); }
+[data-style="glass"] .divider-vertical { width: 1px;  background: var(--glass-border); }
+
+/* Bg sémantiques */
+[data-style="glass"] .bg-surface  { background: var(--glass-bg); }
+[data-style="glass"] .bg-elevated { background: var(--glass-bg-hover); }
+
+/* Scrollbar */
+[data-style="glass"] ::-webkit-scrollbar       { width: 4px; }
+[data-style="glass"] ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: var(--radius-full); }
+[data-style="glass"] ::-webkit-scrollbar-track { background: transparent; }
+
+/* Accessibilité / perf — le flou est coûteux et peut gêner : on le
+   réduit sans jamais toucher au layout. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-style="glass"] .surface,
+  [data-style="glass"] .modal,
+  [data-style="glass"] .input,
+  [data-style="glass"] .badge {
+    background: color-mix(in srgb, var(--glass-bg) 85%, white 15%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+@media (max-width: 47.9375rem) {
+  [data-style="glass"] { --glass-blur: var(--blur-sm); }
+}

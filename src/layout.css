@@ -1,0 +1,714 @@
+/* 
+   CREATIVE TOOLKIT — RESET & LAYOUT FRAMEWORK
+   Responsabilité UNIQUE de ce fichier : architecture globale
+   de la page — spacing, layout, typographie structurelle,
+   dimensions, mouvement.
+   Ce fichier NE CONTIENT AUCUNE COULEUR. Pas de palette, pas
+   de rôles sémantiques (text-*, bg-*, border-*), pas de dark
+   mode, pas d'ombres colorées, pas de scrollbar/selection.
+   Tout ce qui est "philosophie visuelle" est la responsabilité
+   exclusive du fichier design pattern chargé par-dessus
+   (data-style="...").
+   Un design pattern DOIT définir, au minimum, ces tokens pour
+   que ce reset s'exprime correctement :
+     --font-display   (identité typographique du style)
+     Toute couleur (palette, texte, fond, bordure, etc.)
+   Le reset fournit des fallbacks neutres (system-ui) pour que
+   la page reste lisible même sans pattern chargé.
+   Usage :
+   <html>
+     <body data-style="glass" data-mode="dark"> ... </body>
+   </html>
+   Sommaire :
+     1. Tokens — Spacing
+     2. Tokens — Typographie (structure)
+     3. Tokens — Radius / Blur
+     4. Tokens — Z-index
+     5. Tokens — Motion
+     6. Tokens — Percentages
+     7. Tokens — Breakpoints (référence, voir note)
+     8. Reset de base (html/body/éléments)
+     9. Layout — Flexbox
+    10. Layout — Grid
+    11. Layout — Container
+    12. Layout — Position & Z-index
+    13. Layout — Sizing & Aspect-ratio
+    14. Layout — Spacing utilitaires (gap/padding/margin)
+    15. Layout — Overflow
+    16. Typographie — structure & utilitaires
+    17. Accessibilité
+    18. Utilitaires divers
+    19. Responsive (mobile-first : tablette/laptop/desktop/wide)
+    20. Squelette de composants (boîte/taille — pas de couleur)
+   */
+:root {
+  /* 
+     1. SPACING
+     Base : html { font-size: 62.5% } => 1rem = 10px.
+     Échelle harmonisée xs → 5xl, cohérente avec radius/blur/fs.
+   */
+  --sp-3xs: 0.2rem;   /* 2px  */
+  --sp-2xs: 0.4rem;   /* 4px  */
+  --sp-xs:  0.6rem;   /* 6px  */
+  --sp-sm:  0.8rem;   /* 8px  */
+  --sp-md:  1.2rem;   /* 12px */
+  --sp-lg:  1.6rem;   /* 16px */
+  --sp-xl:  2.4rem;   /* 24px */
+  --sp-2xl: 3.2rem;   /* 32px */
+  --sp-3xl: 4.8rem;   /* 48px */
+  --sp-4xl: 6.4rem;   /* 64px */
+  --sp-5xl: 9.6rem;   /* 96px */
+  /* 
+     2. TYPOGRAPHIE — STRUCTURE
+     Aucune couleur ici. Le choix de la typeface "identitaire"
+     (--font-display) appartient au design pattern ; le reset
+     ne fournit qu'un fallback système neutre.
+   */
+  /* Font family — fallback neutre, le pattern peut surcharger */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* --font-display est volontairement NON défini ici :
+     c'est un choix d'identité visuelle, à définir par le pattern.
+     Le fallback est géré via var(--font-display, var(--font-sans)) */
+  /* Font-size — échelle FLUIDE (clamp min / préféré / max)
+     Chaque palier s'interpole tout seul entre mobile et desktop large,
+     pas besoin de le resurcharger dans des @media : c'est le point
+     central de la réponse à "gestion de la taille du texte". Le
+     "préféré" mélange rem + vw : le rem garde l'accessibilité
+     (respecte le zoom navigateur), le vw apporte la fluidité. */
+  --fs-xs:  clamp(1.15rem, 1.05rem + 0.25vw, 1.25rem);  /* ~12→13px */
+  --fs-sm:  clamp(1.3rem,  1.2rem  + 0.3vw,  1.45rem);  /* ~13→14.5px */
+  --fs-md:  clamp(1.5rem,  1.4rem  + 0.35vw, 1.65rem);  /* ~15→16.5px — base */
+  --fs-lg:  clamp(1.65rem, 1.5rem  + 0.4vw,  1.85rem);  /* ~16.5→18.5px */
+  --fs-xl:  clamp(1.8rem,  1.6rem  + 0.5vw,  2.1rem);   /* ~18→21px */
+  --fs-2xl: clamp(2.1rem,  1.85rem + 0.65vw, 2.5rem);   /* ~21→25px */
+  --fs-3xl: clamp(2.6rem,  2.2rem  + 1vw,    3.4rem);   /* ~26→34px */
+  --fs-4xl: clamp(3.1rem,  2.6rem  + 1.4vw,  4.2rem);   /* ~31→42px */
+  --fs-5xl: clamp(3.6rem,  2.9rem  + 1.8vw,  5rem);     /* ~36→50px */
+  /* Font-weight — échelle complète (le 500 manquait dans l'ancienne version) */
+  --weight-thin:      100;
+  --weight-light:     300;
+  --weight-normal:    400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  --weight-black:     900;
+  /* Line-height */
+  --leading-none:    1;
+  --leading-tight:   1.2;
+  --leading-snug:    1.35;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose:   1.8;
+  /* Letter-spacing — en em, plus robuste que px (scale avec le font-size) */
+  --tracking-tighter: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.02em;
+  --tracking-wider:    0.04em;
+  --tracking-widest:   0.08em;
+    /* 
+     3. RADIUS / BLUR
+     Dimensions pures, aucune couleur. Chaque pattern choisit
+     quel palier appliquer à quel composant.
+   */
+  --radius-none: 0;
+  --radius-xs:   0.125rem;
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.5rem;
+  --radius-3xl:  2rem;
+  --radius-full: 9999px;
+  --blur-sm: 4px;
+  --blur-md: 12px;
+  --blur-lg: 24px;
+  --blur-xl: 48px;
+  /* 
+     4. Z-INDEX
+     Pile sémantique, ordre garanti.
+   */
+  --z-base:     0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-modal:    300;
+  --z-overlay:  400;
+  --z-toast:    500;
+  --z-tooltip:  600;
+  /* 
+     5. MOTION
+   */
+  --ease-out:    cubic-bezier(.22, 1, .36, 1);
+  --ease-in:     cubic-bezier(.4, 0, 1, 1);
+  --ease-inout:  cubic-bezier(.45, 0, .55, 1);
+  --ease-linear: linear;
+  --ease-bounce: cubic-bezier(.34, 1.56, .64, 1);
+  --duration-instant: 80ms;
+  --duration-fast:    120ms;
+  --duration-normal:  220ms;
+  --duration-slow:    380ms;
+  --transition-all:       all var(--duration-normal) var(--ease-out);
+  --transition-colors:    color var(--duration-fast) var(--ease-out),
+                          background var(--duration-fast) var(--ease-out),
+                          border-color var(--duration-fast) var(--ease-out);
+  --transition-transform: transform var(--duration-normal) var(--ease-out);
+  --transition-shadow:    box-shadow var(--duration-normal) var(--ease-out);
+  --transition-opacity:   opacity var(--duration-normal) var(--ease-out);
+  /* 
+     6. PERCENTAGES — utilitaires (dividers, largeurs relatives)
+   */
+  --perc-xs: 15%;
+  --perc-sm: 30%;
+  --perc-md: 50%;
+  --perc-lg: 70%;
+  --perc-xl: 90%;
+  /* 
+     7. LAYOUT MISC
+   */
+  --container-max: 120rem; /* 1200px */
+}
+/* --
+   7bis. BREAKPOINTS — référence documentaire (mobile-first)
+   Les custom properties CSS ne sont PAS utilisables à l'intérieur
+   d'un @media (limitation native de CSS, pas encore de support
+   fiable pour @custom-media). Ces valeurs sont donc documentées
+   ici comme constantes, et utilisées en dur dans les @media
+   ci-dessous — reste la SEULE source de vérité pour ces chiffres,
+   ne les redéfinis pas ailleurs.
+     mobile        base, pas de media query   (< 768px)
+     tablette      48rem   / 768px
+     laptop        64rem   / 1024px
+     desktop (pc)  80rem   / 1280px
+     desktop large 96rem   / 1536px
+   Pourquoi rem et pas px : un breakpoint en rem/em se calcule par
+   rapport à la taille de police PAR DÉFAUT du navigateur (16px),
+   pas par rapport à notre html { font-size: 62.5% }. Le hack 62.5%
+   n'interfère donc jamais avec ces seuils — et surtout, si un
+   utilisateur zoome ou augmente la taille de police par défaut de
+   son navigateur (accessibilité), les breakpoints réagissent
+   correctement. C'est le point d'attention n°1 pour éviter un
+   problème d'héritage/cascade avec le responsive.
+   Stratégie : MOBILE-FIRST. Les styles de base ciblent le mobile ;
+   chaque @media (min-width: ...) ne fait que SURCHARGER pour les
+   écrans plus grands. Jamais l'inverse (pas de max-width en
+   cascade descendante) : ça évite d'avoir besoin de !important ou
+   de spécificité artificielle pour reprendre la main sur mobile.
+   Exemple : @media (min-width: 64rem) { ... }  → à partir de "laptop"
+   -- */
+   /* 
+   8. BASE RESET
+    */
+/* box-sizing en cascade héritée plutôt qu'imposé en dur sur `*` :
+   ça permet à un composant précis (ex: un widget tiers qui a besoin
+   de content-box) de le resurcharger localement et que ses enfants
+   suivent automatiquement, sans avoir à re-cibler chaque élément. */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; margin: 0; padding: 0; }
+
+html {
+  font-size: 62.5%;             /* 1rem = 10px, cf. section 1 */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  line-height: var(--leading-normal);
+  min-height: 100dvh;
+  transition: var(--transition-colors);
+  /* Pas de background/color ici : géré par [data-style][data-mode] */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display, var(--font-sans));
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1 { font-size: var(--fs-4xl); }
+h2 { font-size: var(--fs-3xl); }
+h3 { font-size: var(--fs-2xl); }
+h4 { font-size: var(--fs-xl);  }
+h5 { font-size: var(--fs-lg);  }
+h6 { font-size: var(--fs-md);  }
+
+p     { font-size: var(--fs-md); line-height: var(--leading-normal); }
+small { font-size: var(--fs-sm); }
+
+img, video, svg { max-width: 100%; display: block; }
+a          { color: inherit; text-decoration: none; }
+button     { cursor: pointer; border: none; background: transparent; font: inherit; color: inherit; }
+input, textarea, select { font: inherit; color: inherit; }
+ul, ol     { list-style: none; }
+table      { border-collapse: collapse; }
+
+
+/* --
+   9. FLEXBOX
+   -- */
+
+.row      { display: flex; }
+.row-rev  { display: flex; flex-direction: row-reverse; }
+.col      { display: flex; flex-direction: column; }
+.col-rev  { display: flex; flex-direction: column-reverse; }
+
+.wrap   { flex-wrap: wrap; }
+.nowrap { flex-wrap: nowrap; }
+
+.justify-start   { justify-content: flex-start; }
+.justify-center  { justify-content: center; }
+.justify-end     { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around  { justify-content: space-around; }
+.justify-evenly  { justify-content: space-evenly; }
+
+.align-start   { align-items: flex-start; }
+.align-center  { align-items: center; }
+.align-end     { align-items: flex-end; }
+.align-stretch { align-items: stretch; }
+
+.self-start   { align-self: flex-start; }
+.self-center  { align-self: center; }
+.self-end     { align-self: flex-end; }
+.self-stretch { align-self: stretch; }
+
+.flex-1    { flex: 1 1 0%; }
+.flex-auto { flex: 1 1 auto; }
+.flex-none { flex: none; }
+.grow      { flex-grow: 1; }
+.grow-0    { flex-grow: 0; }
+.shrink    { flex-shrink: 1; }
+.shrink-0  { flex-shrink: 0; }
+
+
+/* --
+   10. GRID
+   -- */
+
+.grid         { display: grid; }
+.grid-2       { display: grid; grid-template-columns: repeat(2, 1fr); }
+.grid-3       { display: grid; grid-template-columns: repeat(3, 1fr); }
+.grid-4       { display: grid; grid-template-columns: repeat(4, 1fr); }
+.grid-auto-sm { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
+.grid-auto-md { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+.grid-auto-lg { display: grid; grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr)); }
+.place-center { display: grid; place-items: center; }
+
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-full { grid-column: 1 / -1; }
+
+
+/* --
+   11. CONTAINER
+   -- */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--sp-lg);   /* mobile : padding resserré */
+}
+
+.container-fluid {
+  width: 100%;
+  padding-inline: var(--sp-lg);
+}
+
+@media (min-width: 48rem) {   /* tablette */
+  .container, .container-fluid { padding-inline: var(--sp-xl); }
+}
+@media (min-width: 80rem) {   /* desktop */
+  .container, .container-fluid { padding-inline: var(--sp-2xl); }
+}
+
+
+/* --
+   12. POSITION & Z-INDEX
+   -- */
+
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed    { position: fixed; }
+.sticky   { position: sticky; top: 0; }
+.inset-0  { inset: 0; }
+.center-absolute { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+.z-base     { z-index: var(--z-base); }
+.z-raised   { z-index: var(--z-raised); }
+.z-dropdown { z-index: var(--z-dropdown); }
+.z-sticky   { z-index: var(--z-sticky); }
+.z-modal    { z-index: var(--z-modal); }
+.z-overlay  { z-index: var(--z-overlay); }
+.z-toast    { z-index: var(--z-toast); }
+.z-tooltip  { z-index: var(--z-tooltip); }
+
+
+/* --
+   13. SIZING & ASPECT-RATIO
+   -- */
+
+.w-full      { width: 100%; }
+.w-screen    { width: 100vw; }
+.h-full      { height: 100%; }
+.h-screen    { height: 100vh; }
+.min-h-screen { min-height: 100dvh; }
+.max-w-container { max-width: var(--container-max); }
+
+.aspect-square   { aspect-ratio: 1 / 1; }
+.aspect-video    { aspect-ratio: 16 / 9; }
+.aspect-portrait { aspect-ratio: 3 / 4; }
+
+/* Dividers — taille uniquement (le style/couleur est dans le pattern) */
+.h-divider-xs { width: var(--perc-xs); }
+.h-divider-sm { width: var(--perc-sm); }
+.h-divider-md { width: var(--perc-md); }
+.h-divider-lg { width: var(--perc-lg); }
+.h-divider-xl { width: var(--perc-xl); }
+
+.v-divider-xs { height: var(--perc-xs); }
+.v-divider-sm { height: var(--perc-sm); }
+.v-divider-md { height: var(--perc-md); }
+.v-divider-lg { height: var(--perc-lg); }
+.v-divider-xl { height: var(--perc-xl); }
+
+
+/* --
+   14. SPACING UTILITAIRES — gap / padding / margin
+   Échelle alignée sur --sp-* (section 1).
+   -- */
+
+.gap-3xs { gap: var(--sp-3xs); }
+.gap-2xs { gap: var(--sp-2xs); }
+.gap-xs  { gap: var(--sp-xs);  }
+.gap-sm  { gap: var(--sp-sm);  }
+.gap-md  { gap: var(--sp-md);  }
+.gap-lg  { gap: var(--sp-lg);  }
+.gap-xl  { gap: var(--sp-xl);  }
+.gap-2xl { gap: var(--sp-2xl); }
+.gap-3xl { gap: var(--sp-3xl); }
+
+.p-0  { padding: 0; }
+.p-xs { padding: var(--sp-xs); }
+.p-sm { padding: var(--sp-sm); }
+.p-md { padding: var(--sp-md); }
+.p-lg { padding: var(--sp-lg); }
+.p-xl { padding: var(--sp-xl); }
+.p-2xl { padding: var(--sp-2xl); }
+
+.px-xs { padding-inline: var(--sp-xs); } .py-xs { padding-block: var(--sp-xs); }
+.px-sm { padding-inline: var(--sp-sm); } .py-sm { padding-block: var(--sp-sm); }
+.px-md { padding-inline: var(--sp-md); } .py-md { padding-block: var(--sp-md); }
+.px-lg { padding-inline: var(--sp-lg); } .py-lg { padding-block: var(--sp-lg); }
+.px-xl { padding-inline: var(--sp-xl); } .py-xl { padding-block: var(--sp-xl); }
+
+.pt-xs { padding-top: var(--sp-xs); } .pt-sm { padding-top: var(--sp-sm); } .pt-md { padding-top: var(--sp-md); } .pt-lg { padding-top: var(--sp-lg); }
+.pb-xs { padding-bottom: var(--sp-xs); } .pb-sm { padding-bottom: var(--sp-sm); } .pb-md { padding-bottom: var(--sp-md); } .pb-lg { padding-bottom: var(--sp-lg); }
+
+.m-0  { margin: 0; }
+.m-xs { margin: var(--sp-xs); }
+.m-sm { margin: var(--sp-sm); }
+.m-md { margin: var(--sp-md); }
+.m-lg { margin: var(--sp-lg); }
+.m-xl { margin: var(--sp-xl); }
+
+.mx-auto { margin-inline: auto; }
+.my-auto { margin-block: auto; }
+.mx-xs { margin-inline: var(--sp-xs); } .my-xs { margin-block: var(--sp-xs); }
+.mx-sm { margin-inline: var(--sp-sm); } .my-sm { margin-block: var(--sp-sm); }
+.mx-md { margin-inline: var(--sp-md); } .my-md { margin-block: var(--sp-md); }
+.mx-lg { margin-inline: var(--sp-lg); } .my-lg { margin-block: var(--sp-lg); }
+
+.mt-xs { margin-top: var(--sp-xs); } .mt-sm { margin-top: var(--sp-sm); } .mt-md { margin-top: var(--sp-md); } .mt-lg { margin-top: var(--sp-lg); } .mt-xl { margin-top: var(--sp-xl); }
+.mb-xs { margin-bottom: var(--sp-xs); } .mb-sm { margin-bottom: var(--sp-sm); } .mb-md { margin-bottom: var(--sp-md); } .mb-lg { margin-bottom: var(--sp-lg); } .mb-xl { margin-bottom: var(--sp-xl); }
+
+
+/* --
+   15. OVERFLOW
+   -- */
+
+.ox-hidden { overflow-x: hidden; }
+.ox-auto   { overflow-x: auto; }
+.oy-hidden { overflow-y: hidden; }
+.oy-auto   { overflow-y: auto; }
+.o-hidden  { overflow: hidden; }
+
+
+/* --
+   16. TYPOGRAPHIE — structure & utilitaires (aucune couleur)
+   -- */
+
+.font-display { font-family: var(--font-display, var(--font-sans)); }
+.font-sans    { font-family: var(--font-sans); }
+.font-mono    { font-family: var(--font-mono); }
+
+.fs-xs { font-size: var(--fs-xs); } .fs-sm { font-size: var(--fs-sm); } .fs-md { font-size: var(--fs-md); }
+.fs-lg { font-size: var(--fs-lg); } .fs-xl { font-size: var(--fs-xl); } .fs-2xl { font-size: var(--fs-2xl); }
+.fs-3xl { font-size: var(--fs-3xl); } .fs-4xl { font-size: var(--fs-4xl); }
+
+.fw-thin     { font-weight: var(--weight-thin); }
+.fw-light    { font-weight: var(--weight-light); }
+.fw-normal   { font-weight: var(--weight-normal); }
+.fw-medium   { font-weight: var(--weight-medium); }
+.fw-semibold { font-weight: var(--weight-semibold); }
+.fw-bold     { font-weight: var(--weight-bold); }
+.fw-black    { font-weight: var(--weight-black); }
+
+.leading-none    { line-height: var(--leading-none); }
+.leading-tight   { line-height: var(--leading-tight); }
+.leading-snug    { line-height: var(--leading-snug); }
+.leading-normal  { line-height: var(--leading-normal); }
+.leading-relaxed { line-height: var(--leading-relaxed); }
+.leading-loose   { line-height: var(--leading-loose); }
+
+.tracking-tighter { letter-spacing: var(--tracking-tighter); }
+.tracking-tight   { letter-spacing: var(--tracking-tight); }
+.tracking-normal  { letter-spacing: var(--tracking-normal); }
+.tracking-wide    { letter-spacing: var(--tracking-wide); }
+.tracking-wider   { letter-spacing: var(--tracking-wider); }
+.tracking-widest  { letter-spacing: var(--tracking-widest); }
+
+.ta-l, .text-left   { text-align: left; }
+.ta-r, .text-right  { text-align: right; }
+.ta-c, .text-center { text-align: center; }
+.ta-j                { text-align: justify; }
+
+.tt-up, .uppercase  { text-transform: uppercase; }
+.tt-lo, .lowercase  { text-transform: lowercase; }
+.tt-ca, .capitalize { text-transform: capitalize; }
+
+.underline    { text-decoration: underline; }
+.overline     { text-decoration: overline; }
+.line-through { text-decoration: line-through; }
+
+.truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.clamp-2  { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.clamp-3  { display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+
+/* --
+   17. ACCESSIBILITÉ
+   -- */
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--sp-md);
+  z-index: var(--z-tooltip);
+  transition: top var(--duration-fast) var(--ease-out);
+}
+.skip-link:focus { top: var(--sp-md); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* --
+   18. UTILITAIRES DIVERS
+   -- */
+
+.hidden      { display: none; }
+.invisible   { visibility: hidden; }
+.opacity-0   { opacity: 0; }
+.opacity-50  { opacity: .5; }
+.opacity-100 { opacity: 1; }
+
+.pointer     { cursor: pointer; }
+.not-allowed { cursor: not-allowed; }
+.grab        { cursor: grab; }
+
+.pointer-none { pointer-events: none; }
+.border-none  { border: none; }
+
+.rounded-none { border-radius: var(--radius-none); }
+.rounded-xs   { border-radius: var(--radius-xs); }
+.rounded-sm   { border-radius: var(--radius-sm); }
+.rounded      { border-radius: var(--radius-md); }
+.rounded-lg   { border-radius: var(--radius-lg); }
+.rounded-xl   { border-radius: var(--radius-xl); }
+.rounded-2xl  { border-radius: var(--radius-2xl); }
+.rounded-full { border-radius: var(--radius-full); }
+
+.transition           { transition: var(--transition-all); }
+.transition-colors    { transition: var(--transition-colors); }
+.transition-shadow    { transition: var(--transition-shadow); }
+.transition-transform { transition: var(--transition-transform); }
+.transition-opacity   { transition: var(--transition-opacity); }
+
+
+/* 
+   19. RESPONSIVE — mobile-first
+   Chaque classe préfixée par un breakpoint (tablet-/laptop-/
+   desktop-/wide-) ne fait que SURCHARGER à partir de ce seuil,
+   jamais en-dessous. Compose-les avec les classes de base :
+
+     class="hidden tablet-flex"
+       → invisible sur mobile, devient flex à partir de tablette
+
+     class="col laptop-row gap-sm laptop-gap-lg"
+       → colonne + gap serré sur mobile, ligne + gap large dès laptop
+
+     class="grid laptop-grid-3 desktop-grid-4"
+       → 1 colonne (grid seul) sur mobile, 3 dès laptop, 4 dès desktop
+    */
+
+/* --- Tablette (≥ 48rem / 768px) --- */
+@media (min-width: 48rem) {
+  .tablet-hidden { display: none; }
+  .tablet-block  { display: block; }
+  .tablet-flex   { display: flex; }
+  .tablet-grid   { display: grid; }
+
+  .tablet-row { flex-direction: row; }
+  .tablet-col { flex-direction: column; }
+
+  .tablet-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .tablet-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .tablet-grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* --- Laptop (≥ 64rem / 1024px) --- */
+@media (min-width: 64rem) {
+  .laptop-hidden { display: none; }
+  .laptop-block  { display: block; }
+  .laptop-flex   { display: flex; }
+  .laptop-grid   { display: grid; }
+
+  .laptop-row { flex-direction: row; }
+  .laptop-col { flex-direction: column; }
+
+  .laptop-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .laptop-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .laptop-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .laptop-grid-6 { grid-template-columns: repeat(6, 1fr); }
+
+  .laptop-gap-sm { gap: var(--sp-sm); }
+  .laptop-gap-md { gap: var(--sp-md); }
+  .laptop-gap-lg { gap: var(--sp-lg); }
+  .laptop-gap-xl { gap: var(--sp-xl); }
+}
+
+/* --- Desktop / pc (≥ 80rem / 1280px) --- */
+@media (min-width: 80rem) {
+  .desktop-hidden { display: none; }
+  .desktop-block  { display: block; }
+  .desktop-flex   { display: flex; }
+  .desktop-grid   { display: grid; }
+
+  .desktop-row { flex-direction: row; }
+  .desktop-col { flex-direction: column; }
+
+  .desktop-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .desktop-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .desktop-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .desktop-grid-6 { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* --- Desktop large / pc large (≥ 96rem / 1536px) --- */
+@media (min-width: 96rem) {
+  .wide-hidden { display: none; }
+  .wide-block  { display: block; }
+  .wide-flex   { display: flex; }
+  .wide-grid   { display: grid; }
+
+  .wide-row { flex-direction: row; }
+  .wide-col { flex-direction: column; }
+
+  .wide-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .wide-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .wide-grid-6 { grid-template-columns: repeat(6, 1fr); }
+  .wide-grid-8 { grid-template-columns: repeat(8, 1fr); }
+
+  .max-w-container { max-width: var(--container-max); margin-inline: auto; }
+}
+
+
+/* 
+   20. SQUELETTE DE COMPOSANTS — boîte/taille uniquement
+
+   Ces classes (.btn, .input, .badge, .surface, .modal, .divider,
+   .icon) sont les points d'ancrage que les design patterns vont
+   habiller en couleur. Ce bloc ne fixe QUE ce qui est structurel :
+   padding, hauteur, gap interne, taille de police assignée,
+   display. AUCUNE couleur, ombre, bordure visible, fond ou radius
+   ici — ça, c'est 100% la responsabilité du design pattern actif.
+
+   Sans ce squelette, un bouton stylé par un pattern n'a ni
+   padding ni hauteur cohérente : le pattern ne fait qu'ajouter
+   de la couleur par-dessus une boîte déjà bien dimensionnée.
+    */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+  padding: var(--sp-sm) var(--sp-lg);
+  font-size: var(--fs-md);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+.btn-sm { padding: var(--sp-2xs) var(--sp-md); font-size: var(--fs-sm); }
+.btn-lg { padding: var(--sp-md) var(--sp-xl); font-size: var(--fs-lg); }
+.btn-icon-only { padding: var(--sp-sm); aspect-ratio: 1 / 1; }
+.btn-block { display: flex; width: 100%; }
+
+.input {
+  display: block;
+  width: 100%;
+  padding: var(--sp-sm) var(--sp-md);
+  font-size: var(--fs-md);
+}
+.input-sm { padding: var(--sp-2xs) var(--sp-sm); font-size: var(--fs-sm); }
+.input-lg { padding: var(--sp-md) var(--sp-lg); font-size: var(--fs-lg); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  padding: var(--sp-3xs) var(--sp-sm);
+  font-size: var(--fs-xs);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-none);
+}
+
+.surface {
+  padding: var(--sp-lg);
+}
+.surface-sm { padding: var(--sp-md); }
+.surface-lg { padding: var(--sp-xl); }
+
+.modal {
+  padding: var(--sp-xl);
+  max-width: 48rem;
+  width: 100%;
+}
+.modal-sm { max-width: 36rem; }
+.modal-lg { max-width: 64rem; }
+
+.divider { width: 100%; margin-block: var(--sp-lg); }
+.divider-vertical { height: 100%; margin-inline: var(--sp-lg); }
+
+.icon { display: inline-flex; width: 2rem; height: 2rem; }
+.icon-sm { width: 1.6rem; height: 1.6rem; }
+.icon-lg { width: 2.4rem; height: 2.4rem; }

@@ -1,0 +1,326 @@
+/* ============================================================
+   CREATIVE TOOLKIT — DESIGN PATTERN : FLAT
+   Responsabilité UNIQUE de ce fichier : l'APPARENCE (couleur,
+   texture, ombre, radius appliqué, typographie identitaire) des
+   composants. Aucune règle de spacing/taille/layout ici — c'est
+   la responsabilité exclusive de reset_layout_framework.css,
+   chargé AVANT ce fichier.
+
+   Philosophie FLAT : zéro profondeur. Couleur pure, aplats nets,
+   bordures franches, pas d'ombre, pas de dégradé, pas de flou.
+   Toute la hiérarchie visuelle vient de la couleur et du contraste,
+   jamais de la lumière simulée.
+
+   ------------------------------------------------------------
+   COMMENT RE-SKINNER CE PATTERN (et seulement ceci) :
+   Modifie uniquement le bloc PALETTE ci-dessous. Les 7 couleurs
+   qui s'y trouvent sont l'unique source de vérité : toutes les
+   teintes, tous les rôles sémantiques (texte, fond, bordure,
+   bouton, badge, focus…) et tous les composants en dérivent via
+   color-mix(). Rien n'est écrit en dur plus loin dans ce fichier.
+
+   Pour reskinner depuis un stylesheet projet chargé APRÈS ce
+   fichier, resurcharge le même sélecteur :
+     [data-style="flat"] { --palette-primary: #FF6B00; }
+
+   Ordre de chargement requis :
+     <link rel="stylesheet" href="reset_layout_framework.css">
+     <link rel="stylesheet" href="flat_design_pattern.css">
+     <body data-style="flat" data-mode="light|dark">
+   ============================================================ */
+
+
+/* ============================================================
+   1. PALETTE — INPUT PROJET (seule zone à modifier)
+   ============================================================ */
+
+[data-style="flat"] {
+  --palette-primary:   #3B82F6;  /* couleur de marque — CTA, liens, focus     */
+  --palette-secondary: #10B981;  /* couleur d'accent — deuxième signal        */
+  --palette-neutral:   #64748B;  /* teinte de référence pour TOUS les gris    */
+  --palette-success:   #22C55E;
+  --palette-danger:    #EF4444;
+  --palette-warning:   #F59E0B;
+  --palette-info:      #0EA5E9;
+
+  /* Identité typographique du pattern (fallback système géré par le reset) */
+  --font-display: "Inter", "Helvetica Neue", var(--font-sans);
+
+
+  /* ----------------------------------------------------------
+     1bis. ÉCHELLES DÉRIVÉES — calculées, jamais figées
+  ---------------------------------------------------------- */
+
+  --primary-100: color-mix(in srgb, var(--palette-primary) 15%, white);
+  --primary-300: color-mix(in srgb, var(--palette-primary) 45%, white);
+  --primary-500: var(--palette-primary);
+  --primary-700: color-mix(in srgb, var(--palette-primary) 80%, black);
+  --primary-900: color-mix(in srgb, var(--palette-primary) 55%, black);
+
+  --secondary-100: color-mix(in srgb, var(--palette-secondary) 15%, white);
+  --secondary-300: color-mix(in srgb, var(--palette-secondary) 45%, white);
+  --secondary-500: var(--palette-secondary);
+  --secondary-700: color-mix(in srgb, var(--palette-secondary) 80%, black);
+  --secondary-900: color-mix(in srgb, var(--palette-secondary) 55%, black);
+
+  --gray-50:  color-mix(in srgb, var(--palette-neutral) 4%,  white);
+  --gray-100: color-mix(in srgb, var(--palette-neutral) 8%,  white);
+  --gray-200: color-mix(in srgb, var(--palette-neutral) 16%, white);
+  --gray-300: color-mix(in srgb, var(--palette-neutral) 30%, white);
+  --gray-400: color-mix(in srgb, var(--palette-neutral) 55%, white);
+  --gray-500: var(--palette-neutral);
+  --gray-600: color-mix(in srgb, var(--palette-neutral) 85%, black);
+  --gray-700: color-mix(in srgb, var(--palette-neutral) 65%, black);
+  --gray-800: color-mix(in srgb, var(--palette-neutral) 42%, black);
+  --gray-900: color-mix(in srgb, var(--palette-neutral) 24%, black);
+  --gray-950: color-mix(in srgb, var(--palette-neutral) 12%, black);
+
+  --success-100: color-mix(in srgb, var(--palette-success) 15%, white);
+  --success-300: color-mix(in srgb, var(--palette-success) 45%, white);
+  --success-500: var(--palette-success);
+  --success-700: color-mix(in srgb, var(--palette-success) 80%, black);
+
+  --danger-100: color-mix(in srgb, var(--palette-danger) 15%, white);
+  --danger-300: color-mix(in srgb, var(--palette-danger) 45%, white);
+  --danger-500: var(--palette-danger);
+  --danger-700: color-mix(in srgb, var(--palette-danger) 80%, black);
+
+  --warning-100: color-mix(in srgb, var(--palette-warning) 15%, white);
+  --warning-300: color-mix(in srgb, var(--palette-warning) 45%, white);
+  --warning-500: var(--palette-warning);
+  --warning-700: color-mix(in srgb, var(--palette-warning) 80%, black);
+
+  --info-100: color-mix(in srgb, var(--palette-info) 15%, white);
+  --info-300: color-mix(in srgb, var(--palette-info) 45%, white);
+  --info-500: var(--palette-info);
+  --info-700: color-mix(in srgb, var(--palette-info) 80%, black);
+
+
+  /* ----------------------------------------------------------
+     1ter. RÔLES SÉMANTIQUES — mode light (baseline)
+  ---------------------------------------------------------- */
+
+  --text-primary:    var(--gray-900);
+  --text-secondary:  var(--gray-700);
+  --text-muted:      var(--gray-500);
+  --text-inverse:    #FFFFFF;
+  --text-link:       var(--primary-700);
+  --text-link-hover: var(--primary-900);
+  --text-success:    var(--success-700);
+  --text-danger:     var(--danger-700);
+  --text-warning:    var(--warning-700);
+  --text-info:       var(--info-700);
+
+  --bg-page:           var(--gray-50);
+  --bg-surface:        var(--gray-100);
+  --bg-elevated:       #FFFFFF;
+  --bg-primary-soft:   var(--primary-100);
+  --bg-secondary-soft: var(--secondary-100);
+  --bg-success-soft:   var(--success-100);
+  --bg-danger-soft:    var(--danger-100);
+  --bg-warning-soft:   var(--warning-100);
+  --bg-info-soft:      var(--info-100);
+
+  --border-light:     var(--gray-100);
+  --border-default:   var(--gray-300);
+  --border-strong:    var(--gray-700);
+
+  --btn-primary-bg:         var(--primary-500);
+  --btn-primary-bg-hover:   var(--primary-700);
+  --btn-primary-bg-active:  var(--primary-900);
+  --btn-primary-text:       #FFFFFF;
+  --btn-secondary-bg:       #FFFFFF;
+  --btn-secondary-bg-hover: var(--gray-50);
+  --btn-secondary-text:     var(--gray-700);
+  --btn-secondary-border:   var(--gray-300);
+  --btn-outline-bg-hover:   var(--primary-100);
+  --btn-outline-text:       var(--primary-700);
+  --btn-outline-border:     var(--primary-500);
+  --btn-ghost-bg-hover:     var(--gray-100);
+  --btn-ghost-text:         var(--gray-700);
+
+  --input-bg:           #FFFFFF;
+  --input-border:       var(--gray-300);
+  --input-border-hover: var(--gray-500);
+  --input-border-focus: var(--primary-500);
+  --input-border-error: var(--danger-500);
+  --input-text:         var(--gray-900);
+  --input-placeholder:  var(--gray-500);
+
+  --card-bg:     #FFFFFF;
+  --card-border: var(--gray-100);
+
+  --badge-primary-bg:     var(--primary-100);   --badge-primary-text:   var(--primary-900);
+  --badge-secondary-bg:   var(--secondary-100); --badge-secondary-text: var(--secondary-900);
+  --badge-success-bg:     var(--success-100);   --badge-success-text:   var(--success-700);
+  --badge-danger-bg:      var(--danger-100);    --badge-danger-text:    var(--danger-700);
+  --badge-warning-bg:     var(--warning-100);   --badge-warning-text:   var(--warning-700);
+  --badge-info-bg:        var(--info-100);      --badge-info-text:      var(--info-700);
+
+  --focus-ring:      0 0 0 3px var(--primary-100);
+  --selection-bg:    var(--primary-100);
+  --selection-text:  var(--primary-900);
+  --scrollbar-thumb:       var(--gray-300);
+  --scrollbar-thumb-hover: var(--gray-500);
+  --scrollbar-track:       transparent;
+  --overlay-dark: rgba(0,0,0,.55);
+}
+
+[data-style="flat"][data-mode="dark"] {
+  --text-primary:    var(--gray-50);
+  --text-secondary:  var(--gray-300);
+  --text-muted:      var(--gray-500);
+  --text-inverse:    var(--gray-900);
+  --text-link:       var(--primary-300);
+  --text-link-hover: var(--primary-100);
+  --text-success:    var(--success-300);
+  --text-danger:     var(--danger-300);
+  --text-warning:    var(--warning-300);
+  --text-info:       var(--info-300);
+
+  --bg-page:           var(--gray-900);
+  --bg-surface:        var(--gray-800);
+  --bg-elevated:       color-mix(in srgb, var(--gray-800) 70%, var(--palette-primary) 3%);
+  --bg-primary-soft:   color-mix(in srgb, var(--primary-900) 35%, transparent);
+  --bg-secondary-soft: color-mix(in srgb, var(--secondary-900) 35%, transparent);
+  --bg-success-soft:   color-mix(in srgb, var(--success-700) 20%, transparent);
+  --bg-danger-soft:    color-mix(in srgb, var(--danger-700) 20%, transparent);
+  --bg-warning-soft:   color-mix(in srgb, var(--warning-700) 20%, transparent);
+  --bg-info-soft:      color-mix(in srgb, var(--info-700) 20%, transparent);
+
+  --border-light:   var(--gray-800);
+  --border-default: var(--gray-700);
+  --border-strong:  var(--gray-500);
+
+  --btn-primary-bg:         var(--primary-500);
+  --btn-primary-bg-hover:   var(--primary-300);
+  --btn-primary-bg-active:  var(--primary-100);
+  --btn-primary-text:       var(--gray-900);
+  --btn-secondary-bg:       var(--gray-800);
+  --btn-secondary-bg-hover: var(--gray-700);
+  --btn-secondary-text:     var(--gray-100);
+  --btn-secondary-border:   var(--gray-700);
+  --btn-outline-bg-hover:   color-mix(in srgb, var(--primary-500) 18%, transparent);
+  --btn-outline-text:       var(--primary-300);
+  --btn-outline-border:     var(--primary-300);
+  --btn-ghost-bg-hover:     var(--gray-800);
+  --btn-ghost-text:         var(--gray-200);
+
+  --input-bg:           var(--gray-800);
+  --input-border:       var(--gray-700);
+  --input-border-hover: var(--gray-500);
+  --input-text:         var(--gray-50);
+  --input-placeholder:  var(--gray-500);
+
+  --card-bg:     var(--gray-800);
+  --card-border: var(--gray-700);
+
+  --badge-primary-bg:     color-mix(in srgb, var(--primary-500) 22%, transparent);   --badge-primary-text:   var(--primary-300);
+  --badge-secondary-bg:   color-mix(in srgb, var(--secondary-500) 22%, transparent); --badge-secondary-text: var(--secondary-300);
+  --badge-success-bg:     color-mix(in srgb, var(--success-500) 22%, transparent);   --badge-success-text:   var(--success-300);
+  --badge-danger-bg:      color-mix(in srgb, var(--danger-500) 22%, transparent);    --badge-danger-text:    var(--danger-300);
+  --badge-warning-bg:     color-mix(in srgb, var(--warning-500) 22%, transparent);   --badge-warning-text:   var(--warning-300);
+  --badge-info-bg:        color-mix(in srgb, var(--info-500) 22%, transparent);      --badge-info-text:      var(--info-300);
+
+  --focus-ring:      0 0 0 3px color-mix(in srgb, var(--primary-500) 30%, transparent);
+  --selection-bg:    var(--primary-700);
+  --selection-text:  #FFFFFF;
+  --scrollbar-thumb:       var(--gray-700);
+  --scrollbar-thumb-hover: var(--gray-500);
+  --scrollbar-track:       var(--gray-900);
+  --overlay-dark: rgba(0,0,0,.75);
+}
+
+
+/* ============================================================
+   2. RENDU VISUEL — FLAT
+   Zéro ombre, zéro flou, zéro dégradé : la règle est absolue.
+   ============================================================ */
+
+[data-style="flat"][data-mode="light"] { background: var(--bg-page); color: var(--text-primary); }
+[data-style="flat"][data-mode="dark"]  { background: var(--bg-page); color: var(--text-primary); }
+[data-style="flat"] { font-family: var(--font-display); }
+
+[data-style="flat"] ::selection { background: var(--selection-bg); color: var(--selection-text); }
+
+/* Surface */
+[data-style="flat"] .surface { background: var(--bg-elevated); border: 1px solid var(--border-default); border-radius: var(--radius-md); }
+
+/* Texte */
+[data-style="flat"] .text-heading { font-family: var(--font-display); font-weight: var(--weight-bold); color: var(--text-primary); line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); }
+[data-style="flat"] .text-body    { color: var(--text-secondary); }
+[data-style="flat"] .text-label   { text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--text-muted); }
+[data-style="flat"] .text-code    { font-family: var(--font-mono); background: var(--bg-surface); border-radius: var(--radius-sm); color: var(--text-secondary); }
+
+[data-style="flat"] .text-primary   { color: var(--text-primary); }
+[data-style="flat"] .text-secondary { color: var(--text-secondary); }
+[data-style="flat"] .text-muted     { color: var(--text-muted); }
+[data-style="flat"] .text-inverse   { color: var(--text-inverse); }
+[data-style="flat"] .text-link      { color: var(--text-link); }
+[data-style="flat"] .text-link:hover{ color: var(--text-link-hover); }
+[data-style="flat"] .text-success   { color: var(--text-success); }
+[data-style="flat"] .text-danger    { color: var(--text-danger); }
+[data-style="flat"] .text-warning   { color: var(--text-warning); }
+[data-style="flat"] .text-info      { color: var(--text-info); }
+[data-style="flat"] .text-brand     { color: var(--primary-500); }
+[data-style="flat"] .text-accent    { color: var(--secondary-500); }
+
+/* Boutons */
+[data-style="flat"] .btn               { transition: var(--transition-colors); border-radius: var(--radius-md); }
+[data-style="flat"] .btn-primary       { background: var(--btn-primary-bg); color: var(--btn-primary-text); }
+[data-style="flat"] .btn-primary:hover { background: var(--btn-primary-bg-hover); }
+[data-style="flat"] .btn-primary:active{ background: var(--btn-primary-bg-active); }
+[data-style="flat"] .btn-secondary       { background: var(--btn-secondary-bg); color: var(--btn-secondary-text); border: 1px solid var(--btn-secondary-border); }
+[data-style="flat"] .btn-secondary:hover { background: var(--btn-secondary-bg-hover); }
+[data-style="flat"] .btn-outline         { background: transparent; color: var(--btn-outline-text); border: 1px solid var(--btn-outline-border); }
+[data-style="flat"] .btn-outline:hover   { background: var(--btn-outline-bg-hover); }
+[data-style="flat"] .btn-ghost           { background: transparent; color: var(--btn-ghost-text); }
+[data-style="flat"] .btn-ghost:hover     { background: var(--btn-ghost-bg-hover); color: var(--text-primary); }
+[data-style="flat"] .btn-accent          { background: var(--secondary-500); color: #fff; }
+[data-style="flat"] .btn-accent:hover    { background: var(--secondary-700); }
+[data-style="flat"] .btn-danger          { background: var(--danger-500); color: #fff; }
+[data-style="flat"] .btn-danger:hover    { background: var(--danger-700); }
+[data-style="flat"] .btn:disabled        { background: var(--gray-100); color: var(--gray-400); border-color: var(--gray-100); cursor: not-allowed; }
+
+/* Input */
+[data-style="flat"] .input { background: var(--input-bg); border: 1px solid var(--input-border); border-radius: var(--radius-md); color: var(--input-text); transition: border-color var(--duration-fast) var(--ease-out); }
+[data-style="flat"] .input::placeholder { color: var(--input-placeholder); }
+[data-style="flat"] .input:hover  { border-color: var(--input-border-hover); }
+[data-style="flat"] .input:focus  { outline: none; border-color: var(--input-border-focus); box-shadow: var(--focus-ring); }
+[data-style="flat"] .input.error  { border-color: var(--input-border-error); }
+
+/* Icônes */
+[data-style="flat"] .icon         { color: var(--text-muted); }
+[data-style="flat"] .icon-brand   { color: var(--primary-500); }
+[data-style="flat"] .icon-accent  { color: var(--secondary-500); }
+[data-style="flat"] .icon-danger  { color: var(--danger-500); }
+[data-style="flat"] .icon-success { color: var(--success-500); }
+
+/* Badges */
+[data-style="flat"] .badge           { border-radius: var(--radius-full); border: 1px solid transparent; }
+[data-style="flat"] .badge-primary   { background: var(--badge-primary-bg);   color: var(--badge-primary-text); }
+[data-style="flat"] .badge-secondary { background: var(--badge-secondary-bg); color: var(--badge-secondary-text); }
+[data-style="flat"] .badge-success   { background: var(--badge-success-bg);   color: var(--badge-success-text); }
+[data-style="flat"] .badge-danger    { background: var(--badge-danger-bg);    color: var(--badge-danger-text); }
+[data-style="flat"] .badge-warning   { background: var(--badge-warning-bg);   color: var(--badge-warning-text); }
+[data-style="flat"] .badge-info      { background: var(--badge-info-bg);      color: var(--badge-info-text); }
+[data-style="flat"] .badge-neutral   { background: var(--bg-surface);         color: var(--text-muted); border-color: var(--border-default); }
+
+/* Modal */
+[data-style="flat"] .modal   { background: var(--bg-elevated); border: 1px solid var(--border-default); border-radius: var(--radius-xl); }
+[data-style="flat"] .overlay { position: fixed; inset: 0; background: var(--overlay-dark); z-index: var(--z-overlay); }
+
+/* Dividers */
+[data-style="flat"] .divider          { height: 1px; background: var(--border-default); }
+[data-style="flat"] .divider-vertical { width: 1px;  background: var(--border-default); }
+
+/* Bg sémantiques */
+[data-style="flat"] .bg          { background: var(--bg-page); }
+[data-style="flat"] .bg-surface  { background: var(--bg-surface); }
+[data-style="flat"] .bg-elevated { background: var(--bg-elevated); }
+
+/* Scrollbar */
+[data-style="flat"] ::-webkit-scrollbar       { width: 6px; height: 6px; }
+[data-style="flat"] ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+[data-style="flat"] ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: var(--radius-full); }
+[data-style="flat"] ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }

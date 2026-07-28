@@ -1,0 +1,172 @@
+/* ============================================================
+   CREATIVE TOOLKIT — DESIGN PATTERN : GLOW
+   Responsabilité UNIQUE de ce fichier : l'APPARENCE des
+   composants (couleur, halo lumineux, typographie identitaire).
+   Aucun spacing/taille/layout ici — c'est le rôle exclusif de
+   reset_layout_framework.css, chargé AVANT ce fichier.
+
+   Philosophie GLOW : canvas sombre, accents néon, ombres "bloom"
+   qui rayonnent depuis la couleur de marque. Rien n'est éclairé
+   par une lumière neutre : toute lueur est teintée par la palette.
+
+   ------------------------------------------------------------
+   COMMENT RE-SKINNER : modifie uniquement le bloc PALETTE.
+   Tout le reste (teintes, halos, composants) en dérive via
+   color-mix(). Depuis un stylesheet projet chargé APRÈS ce
+   fichier : [data-style="glow"] { --palette-primary: #...; }
+   ============================================================ */
+
+
+/* ============================================================
+   1. PALETTE — INPUT PROJET (seule zone à modifier)
+   ============================================================ */
+
+[data-style="glow"] {
+  --palette-primary:   #A855F7;  /* couleur de marque — halo principal      */
+  --palette-secondary: #22D3EE;  /* couleur d'accent — deuxième halo        */
+  --palette-neutral:   #7C7A99;  /* teinte de référence pour les gris/texte */
+  --palette-success:   #22C55E;
+  --palette-danger:    #EF4444;
+  --palette-warning:   #F59E0B;
+  --palette-info:      #22D3EE;
+
+  --font-display: "Space Grotesk", "Segoe UI", var(--font-sans);
+
+  /* -- Échelles dérivées -- */
+  --primary-100: color-mix(in srgb, var(--palette-primary) 15%, white);
+  --primary-200: color-mix(in srgb, var(--palette-primary) 30%, white);
+  --primary-300: color-mix(in srgb, var(--palette-primary) 45%, white);
+  --primary-400: color-mix(in srgb, var(--palette-primary) 65%, white);
+  --primary-500: var(--palette-primary);
+  --primary-600: color-mix(in srgb, var(--palette-primary) 85%, black);
+  --primary-700: color-mix(in srgb, var(--palette-primary) 80%, black);
+  --primary-900: color-mix(in srgb, var(--palette-primary) 55%, black);
+
+  --secondary-100: color-mix(in srgb, var(--palette-secondary) 15%, white);
+  --secondary-300: color-mix(in srgb, var(--palette-secondary) 45%, white);
+  --secondary-400: color-mix(in srgb, var(--palette-secondary) 65%, white);
+  --secondary-500: var(--palette-secondary);
+  --secondary-600: color-mix(in srgb, var(--palette-secondary) 85%, black);
+  --secondary-700: color-mix(in srgb, var(--palette-secondary) 80%, black);
+  --secondary-900: color-mix(in srgb, var(--palette-secondary) 55%, black);
+
+  --gray-50:  color-mix(in srgb, var(--palette-neutral) 4%,  white);
+  --gray-100: color-mix(in srgb, var(--palette-neutral) 8%,  white);
+  --gray-200: color-mix(in srgb, var(--palette-neutral) 16%, white);
+  --gray-300: color-mix(in srgb, var(--palette-neutral) 30%, white);
+  --gray-600: color-mix(in srgb, var(--palette-neutral) 85%, black);
+  --gray-900: color-mix(in srgb, var(--palette-neutral) 24%, black);
+
+  --success-300: color-mix(in srgb, var(--palette-success) 45%, white);
+  --success-500: var(--palette-success);
+  --danger-300:  color-mix(in srgb, var(--palette-danger) 45%, white);
+  --danger-500:  var(--palette-danger);
+  --warning-300: color-mix(in srgb, var(--palette-warning) 45%, white);
+  --warning-500: var(--palette-warning);
+  --info-300:    color-mix(in srgb, var(--palette-info) 45%, white);
+  --info-500:    var(--palette-info);
+
+  /* -- Halos — dérivés à 100% de primary / secondary -- */
+  --glow-strong: color-mix(in srgb, var(--primary-500) 65%, transparent);
+  --glow-mid:    color-mix(in srgb, var(--primary-500) 35%, transparent);
+  --glow-soft:   color-mix(in srgb, var(--primary-500) 18%, transparent);
+  --glow-accent: color-mix(in srgb, var(--secondary-500) 55%, transparent);
+  --glow-border: color-mix(in srgb, var(--primary-500) 40%, transparent);
+}
+
+
+/* ============================================================
+   2. RENDU VISUEL — GLOW
+   Toutes les couleurs de halo dérivent de --primary-*/--secondary-*.
+   ============================================================ */
+
+[data-style="glow"] { font-family: var(--font-display); }
+[data-style="glow"] ::selection { background: color-mix(in srgb, var(--primary-500) 55%, transparent); color: #fff; }
+
+[data-style="glow"][data-mode="dark"]  { background: color-mix(in srgb, var(--primary-900) 15%, #05050a); }
+[data-style="glow"][data-mode="light"] { background: color-mix(in srgb, var(--primary-100) 60%, #f8f5ff); }
+
+/* Surface */
+[data-style="glow"] .surface        { background: color-mix(in srgb, var(--primary-900) 25%, rgba(10,5,20,.8)); border: 1px solid var(--glow-border); border-radius: var(--radius-lg); box-shadow: 0 0 0 1px var(--glow-soft), 0 0 20px var(--glow-mid); transition: box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out); }
+[data-style="glow"] .surface:hover  { border-color: color-mix(in srgb, var(--primary-500) 75%, transparent); box-shadow: 0 0 0 1px var(--glow-mid), 0 0 32px var(--glow-strong); }
+[data-style="glow"][data-mode="light"] .surface { background: color-mix(in srgb, var(--primary-100) 50%, rgba(250,248,255,.9)); border: 1px solid color-mix(in srgb, var(--primary-500) 20%, transparent); }
+
+/* Texte */
+[data-style="glow"] .text-heading   { font-family: var(--font-display); font-weight: var(--weight-bold); color: #fff; text-shadow: 0 0 20px var(--glow-mid); line-height: var(--leading-tight); }
+[data-style="glow"][data-mode="light"] .text-heading { color: var(--primary-900); text-shadow: none; }
+[data-style="glow"] .text-body      { color: color-mix(in srgb, var(--primary-100) 70%, rgba(200,190,230,.8)); }
+[data-style="glow"][data-mode="light"] .text-body { color: var(--gray-600); }
+[data-style="glow"] .text-label     { text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--primary-300); text-shadow: 0 0 10px var(--glow-mid); }
+[data-style="glow"] .text-glow      { color: var(--primary-400); text-shadow: 0 0 20px var(--glow-strong); }
+[data-style="glow"] .text-primary   { color: #fff; }
+[data-style="glow"][data-mode="light"] .text-primary { color: var(--primary-900); }
+[data-style="glow"] .text-muted     { color: color-mix(in srgb, var(--primary-200) 45%, rgba(200,190,230,.45)); }
+[data-style="glow"] .text-brand     { color: var(--primary-400); }
+[data-style="glow"] .text-accent    { color: var(--secondary-400); }
+[data-style="glow"] .text-success   { color: var(--success-300); }
+[data-style="glow"] .text-danger    { color: var(--danger-300); }
+[data-style="glow"] .text-warning   { color: var(--warning-300); }
+[data-style="glow"] .text-info      { color: var(--info-300); }
+
+/* Boutons */
+[data-style="glow"] .btn            { border-radius: var(--radius-md); transition: var(--transition-all); }
+[data-style="glow"] .btn-primary    { background: var(--primary-600); color: #fff; box-shadow: 0 0 16px var(--glow-mid), 0 0 40px var(--glow-soft); border: 1px solid color-mix(in srgb, var(--primary-300) 45%, transparent); }
+[data-style="glow"] .btn-primary:hover { background: var(--primary-500); box-shadow: 0 0 24px var(--glow-strong), 0 0 60px var(--glow-mid); }
+[data-style="glow"] .btn-secondary  { background: transparent; color: var(--primary-300); border: 1px solid color-mix(in srgb, var(--primary-500) 55%, transparent); box-shadow: 0 0 10px var(--glow-soft) inset; }
+[data-style="glow"] .btn-secondary:hover { border-color: color-mix(in srgb, var(--primary-500) 90%, transparent); box-shadow: 0 0 16px var(--glow-soft) inset, 0 0 20px var(--glow-soft); }
+[data-style="glow"] .btn-accent     { background: var(--secondary-600); color: #fff; box-shadow: 0 0 16px var(--glow-accent), 0 0 40px color-mix(in srgb, var(--secondary-500) 20%, transparent); border: 1px solid color-mix(in srgb, var(--secondary-300) 40%, transparent); }
+[data-style="glow"] .btn-ghost      { background: transparent; color: color-mix(in srgb, var(--primary-200) 70%, rgba(200,190,230,.6)); }
+[data-style="glow"] .btn-ghost:hover { color: #fff; text-shadow: 0 0 10px var(--glow-mid); }
+[data-style="glow"] .btn-danger     { background: var(--danger-500); color: #fff; box-shadow: 0 0 16px color-mix(in srgb, var(--danger-500) 45%, transparent); }
+
+/* Input */
+[data-style="glow"] .input          { background: color-mix(in srgb, var(--primary-900) 30%, rgba(10,5,20,.6)); border: 1px solid var(--glow-border); border-radius: var(--radius-md); color: #fff; transition: var(--transition-all); }
+[data-style="glow"] .input::placeholder { color: color-mix(in srgb, var(--primary-200) 40%, rgba(200,190,230,.4)); }
+[data-style="glow"] .input:focus    { outline: none; border-color: var(--primary-500); box-shadow: 0 0 0 1px var(--primary-500), 0 0 16px var(--glow-mid), 0 0 30px var(--glow-soft) inset; }
+[data-style="glow"][data-mode="light"] .input { background: color-mix(in srgb, var(--primary-100) 80%, rgba(250,248,255,.8)); color: var(--gray-900); border-color: color-mix(in srgb, var(--primary-500) 25%, transparent); }
+
+/* Icônes */
+[data-style="glow"] .icon           { color: color-mix(in srgb, var(--primary-200) 60%, rgba(200,190,230,.6)); }
+[data-style="glow"] .icon-brand     { color: var(--primary-400); filter: drop-shadow(0 0 6px var(--glow-mid)); }
+[data-style="glow"] .icon-accent    { color: var(--secondary-400); filter: drop-shadow(0 0 8px var(--glow-accent)); }
+
+/* Badges — chaque teinte, y compris status, garde son propre halo */
+[data-style="glow"] .badge           { border-radius: var(--radius-full); border: 1px solid; }
+[data-style="glow"] .badge-primary   { background: color-mix(in srgb, var(--primary-500) 15%, transparent);   color: var(--primary-300);   border-color: color-mix(in srgb, var(--primary-500) 45%, transparent);   box-shadow: 0 0 8px color-mix(in srgb, var(--primary-500) 20%, transparent); }
+[data-style="glow"] .badge-secondary { background: color-mix(in srgb, var(--secondary-500) 12%, transparent); color: var(--secondary-300); border-color: color-mix(in srgb, var(--secondary-500) 45%, transparent); box-shadow: 0 0 8px color-mix(in srgb, var(--secondary-500) 18%, transparent); }
+[data-style="glow"] .badge-success   { background: color-mix(in srgb, var(--success-500) 12%, transparent);   color: var(--success-300);   border-color: color-mix(in srgb, var(--success-500) 40%, transparent);   box-shadow: 0 0 8px color-mix(in srgb, var(--success-500) 18%, transparent); }
+[data-style="glow"] .badge-danger    { background: color-mix(in srgb, var(--danger-500) 12%, transparent);    color: var(--danger-300);    border-color: color-mix(in srgb, var(--danger-500) 40%, transparent);    box-shadow: 0 0 8px color-mix(in srgb, var(--danger-500) 18%, transparent); }
+[data-style="glow"] .badge-warning   { background: color-mix(in srgb, var(--warning-500) 12%, transparent);   color: var(--warning-300);   border-color: color-mix(in srgb, var(--warning-500) 40%, transparent);   box-shadow: 0 0 8px color-mix(in srgb, var(--warning-500) 18%, transparent); }
+[data-style="glow"] .badge-info      { background: color-mix(in srgb, var(--info-500) 12%, transparent);      color: var(--info-300);      border-color: color-mix(in srgb, var(--info-500) 40%, transparent);      box-shadow: 0 0 8px color-mix(in srgb, var(--info-500) 18%, transparent); }
+[data-style="glow"] .badge-neutral   { background: rgba(255,255,255,.05); color: color-mix(in srgb, var(--primary-100) 70%, rgba(200,190,230,.7)); border-color: rgba(255,255,255,.1); }
+
+/* Modal */
+[data-style="glow"] .modal          { background: color-mix(in srgb, var(--primary-900) 20%, rgba(8,5,20,.92)); border: 1px solid color-mix(in srgb, var(--primary-500) 45%, transparent); border-radius: var(--radius-2xl); box-shadow: 0 0 0 1px var(--glow-soft), 0 0 60px var(--glow-mid), 0 20px 40px rgba(0,0,0,.5); }
+[data-style="glow"][data-mode="light"] .modal { background: color-mix(in srgb, var(--primary-100) 30%, rgba(250,248,255,.98)); }
+[data-style="glow"] .overlay        { position: fixed; inset: 0; background: rgba(2,0,8,.75); z-index: var(--z-overlay); backdrop-filter: blur(var(--blur-sm)); -webkit-backdrop-filter: blur(var(--blur-sm)); }
+
+/* Dividers */
+[data-style="glow"] .divider          { height: 1px; background: linear-gradient(to right, transparent, var(--glow-mid), transparent); }
+[data-style="glow"] .divider-vertical { width: 1px;  background: linear-gradient(to bottom, transparent, var(--glow-mid), transparent); }
+
+/* Bg sémantiques */
+[data-style="glow"] .bg          { background: color-mix(in srgb, var(--primary-900) 15%, #05050a); }
+[data-style="glow"] .bg-surface  { background: color-mix(in srgb, var(--primary-900) 25%, rgba(10,5,20,.8)); }
+
+/* Scrollbar */
+[data-style="glow"] ::-webkit-scrollbar       { width: 4px; }
+[data-style="glow"] ::-webkit-scrollbar-thumb { background: var(--primary-500); box-shadow: 0 0 8px var(--glow-strong); border-radius: var(--radius-full); }
+[data-style="glow"] ::-webkit-scrollbar-track { background: color-mix(in srgb, var(--primary-500) 5%, transparent); }
+
+/* Performance — le halo coûte cher au rendu sur mobile : on l'allège,
+   jamais on ne touche à la mise en page. */
+@media (max-width: 47.9375rem) {
+  [data-style="glow"] .surface,
+  [data-style="glow"] .btn-primary,
+  [data-style="glow"] .modal {
+    box-shadow: 0 0 0 1px var(--glow-soft), 0 0 12px var(--glow-soft);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-style="glow"] .surface { transition: none; }
+}

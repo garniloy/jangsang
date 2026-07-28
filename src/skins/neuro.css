@@ -1,0 +1,170 @@
+/* ============================================================
+   CREATIVE TOOLKIT — DESIGN PATTERN : NEURO (neumorphism)
+   Responsabilité UNIQUE de ce fichier : l'APPARENCE des
+   composants (couleur, ombre douce, typographie identitaire).
+   Aucun spacing/taille/layout ici — c'est le rôle exclusif de
+   reset_layout_framework.css, chargé AVANT ce fichier.
+
+   Philosophie NEURO : extrusion douce depuis le fond. Les ombres
+   simulent une matière physique. Principe important : une ombre
+   neumorphique n'est PAS grise par défaut — c'est une version
+   plus sombre / plus claire de LA MÊME matière que la surface.
+   Ici les deux ombres (claire et sombre) sont calculées à partir
+   de --nm-bg elle-même, qui dérive de la palette : la texture
+   entière change de teinte avec la marque, pas seulement l'accent.
+
+   ------------------------------------------------------------
+   COMMENT RE-SKINNER : modifie uniquement le bloc PALETTE.
+   Tout le reste (fond, ombres, composants) en dérive via
+   color-mix(). Depuis un stylesheet projet chargé APRÈS ce
+   fichier : [data-style="neuro"] { --palette-primary: #...; }
+   ============================================================ */
+
+
+/* ============================================================
+   1. PALETTE — INPUT PROJET (seule zone à modifier)
+   ============================================================ */
+
+[data-style="neuro"] {
+  --palette-primary:   #4C6EF5;  /* couleur de marque — accents, focus     */
+  --palette-secondary: #F76707;  /* couleur d'accent — deuxième signal     */
+  --palette-neutral:   #8892A6;  /* teinte de référence de la matière      */
+  --palette-success:   #22C55E;
+  --palette-danger:    #EF4444;
+  --palette-warning:   #F59E0B;
+  --palette-info:      #0EA5E9;
+
+  --font-display: "Poppins", "Segoe UI", var(--font-sans);
+
+  /* -- Échelles dérivées -- */
+  --primary-200: color-mix(in srgb, var(--palette-primary) 30%, white);
+  --primary-300: color-mix(in srgb, var(--palette-primary) 45%, white);
+  --primary-400: color-mix(in srgb, var(--palette-primary) 65%, white);
+  --primary-600: color-mix(in srgb, var(--palette-primary) 85%, black);
+  --primary-700: color-mix(in srgb, var(--palette-primary) 80%, black);
+  --primary-900: color-mix(in srgb, var(--palette-primary) 55%, black);
+
+  --secondary-400: color-mix(in srgb, var(--palette-secondary) 65%, white);
+  --secondary-700: color-mix(in srgb, var(--palette-secondary) 80%, black);
+
+  --success-300: color-mix(in srgb, var(--palette-success) 45%, white);
+  --success-700: color-mix(in srgb, var(--palette-success) 80%, black);
+  --danger-300:  color-mix(in srgb, var(--palette-danger) 45%, white);
+  --danger-500:  var(--palette-danger);
+  --warning-300: color-mix(in srgb, var(--palette-warning) 45%, white);
+  --warning-500: var(--palette-warning);
+  --info-300:    color-mix(in srgb, var(--palette-info) 45%, white);
+  --info-700:    color-mix(in srgb, var(--palette-info) 80%, black);
+}
+
+[data-style="neuro"][data-mode="light"] {
+  --nm-bg: color-mix(in srgb, var(--palette-primary) 6%, #e4e9f0);
+  /* Ombres calculées depuis --nm-bg : même teinte, luminosité opposée */
+  --nm-shadow-dark:  color-mix(in srgb, color-mix(in srgb, var(--nm-bg) 35%, black) 65%, transparent);
+  --nm-shadow-light: color-mix(in srgb, color-mix(in srgb, var(--nm-bg) 10%, white) 85%, transparent);
+  --nm-text:         color-mix(in srgb, var(--palette-primary) 12%, #5a6a7e);
+  --nm-text-strong:  color-mix(in srgb, var(--palette-primary) 18%, #2d3b4f);
+  --nm-brand:        var(--primary-700);
+  --nm-accent:       var(--secondary-700);
+  background: var(--nm-bg);
+}
+[data-style="neuro"][data-mode="dark"] {
+  --nm-bg: color-mix(in srgb, var(--palette-primary) 10%, #1e2130);
+  --nm-shadow-dark:  color-mix(in srgb, color-mix(in srgb, var(--nm-bg) 40%, black) 75%, transparent);
+  --nm-shadow-light: color-mix(in srgb, color-mix(in srgb, var(--nm-bg) 55%, white) 45%, transparent);
+  --nm-text:         color-mix(in srgb, var(--palette-primary) 12%, #6b7a99);
+  --nm-text-strong:  color-mix(in srgb, var(--palette-primary) 15%, #c0cce0);
+  --nm-brand:        var(--primary-400);
+  --nm-accent:       var(--secondary-400);
+  background: var(--nm-bg);
+}
+
+
+/* ============================================================
+   2. RENDU VISUEL — NEURO
+   Toujours la même paire d'ombres (claire/sombre), jamais de
+   bordure franche : la profondeur vient exclusivement de la
+   lumière simulée.
+   ============================================================ */
+
+[data-style="neuro"] { font-family: var(--font-display); color: var(--nm-text); }
+[data-style="neuro"] ::selection { background: var(--nm-brand); color: #fff; }
+
+/* Surface */
+[data-style="neuro"] .surface       { background: var(--nm-bg); border-radius: var(--radius-2xl); box-shadow: 8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light); }
+[data-style="neuro"] .surface-inset { background: var(--nm-bg); border-radius: var(--radius-xl); box-shadow: inset 4px 4px 10px var(--nm-shadow-dark), inset -4px -4px 10px var(--nm-shadow-light); }
+
+/* Texte */
+[data-style="neuro"] .text-heading  { font-weight: var(--weight-semibold); color: var(--nm-text-strong); letter-spacing: var(--tracking-tight); }
+[data-style="neuro"] .text-body     { color: var(--nm-text); }
+[data-style="neuro"] .text-label    { text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--nm-text); }
+[data-style="neuro"] .text-primary  { color: var(--nm-text-strong); }
+[data-style="neuro"] .text-muted    { color: var(--nm-text); opacity: .75; }
+[data-style="neuro"] .text-brand    { color: var(--nm-brand); }
+[data-style="neuro"] .text-accent   { color: var(--nm-accent); }
+[data-style="neuro"] .text-success  { color: var(--success-700); }
+[data-style="neuro"] .text-danger   { color: var(--danger-500); }
+[data-style="neuro"] .text-warning  { color: var(--warning-500); }
+[data-style="neuro"] .text-info     { color: var(--info-700); }
+[data-style="neuro"][data-mode="dark"] .text-success { color: var(--success-300); }
+[data-style="neuro"][data-mode="dark"] .text-danger  { color: var(--danger-300); }
+[data-style="neuro"][data-mode="dark"] .text-warning { color: var(--warning-300); }
+[data-style="neuro"][data-mode="dark"] .text-info    { color: var(--info-300); }
+
+/* Boutons */
+[data-style="neuro"] .btn             { background: var(--nm-bg); color: var(--nm-text-strong); border: none; box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light); border-radius: var(--radius-xl); transition: var(--transition-all); }
+[data-style="neuro"] .btn:active,
+[data-style="neuro"] .btn-inset       { box-shadow: inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light); }
+[data-style="neuro"] .btn-primary     { background: var(--nm-brand); color: #fff; box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light); }
+[data-style="neuro"] .btn-primary:hover { filter: brightness(1.1); }
+[data-style="neuro"] .btn-secondary   { background: var(--nm-bg); color: var(--nm-text-strong); box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light); }
+[data-style="neuro"] .btn-secondary:hover { box-shadow: inset 2px 2px 5px var(--nm-shadow-dark), inset -2px -2px 5px var(--nm-shadow-light); }
+[data-style="neuro"] .btn-accent      { background: var(--nm-accent); color: #fff; box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light); }
+[data-style="neuro"] .btn-ghost       { background: transparent; color: var(--nm-text); box-shadow: none; }
+[data-style="neuro"] .btn-ghost:hover { color: var(--nm-text-strong); }
+[data-style="neuro"] .btn-danger      { background: var(--danger-500); color: #fff; box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light); }
+
+/* Input */
+[data-style="neuro"] .input           { background: var(--nm-bg); border: none; border-radius: var(--radius-xl); color: var(--nm-text-strong); box-shadow: inset 4px 4px 8px var(--nm-shadow-dark), inset -4px -4px 8px var(--nm-shadow-light); transition: var(--transition-shadow); }
+[data-style="neuro"] .input::placeholder { color: var(--nm-text); opacity: .6; }
+[data-style="neuro"] .input:focus     { outline: none; box-shadow: inset 4px 4px 10px var(--nm-shadow-dark), inset -4px -4px 10px var(--nm-shadow-light), 0 0 0 2px var(--nm-brand); }
+
+/* Icônes */
+[data-style="neuro"] .icon            { color: var(--nm-text); }
+[data-style="neuro"] .icon-brand      { color: var(--nm-brand); }
+[data-style="neuro"] .icon-accent     { color: var(--nm-accent); }
+
+/* Badges */
+[data-style="neuro"] .badge           { border-radius: var(--radius-full); background: var(--nm-bg); color: var(--nm-text-strong); box-shadow: 3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light); }
+[data-style="neuro"] .badge-primary   { color: var(--nm-brand); }
+[data-style="neuro"] .badge-secondary { color: var(--nm-accent); }
+[data-style="neuro"] .badge-success   { color: var(--success-700); }
+[data-style="neuro"] .badge-danger    { color: var(--danger-500); }
+[data-style="neuro"] .badge-warning   { color: var(--warning-500); }
+[data-style="neuro"] .badge-info      { color: var(--info-700); }
+[data-style="neuro"][data-mode="dark"] .badge-success  { color: var(--success-300); }
+[data-style="neuro"][data-mode="dark"] .badge-danger   { color: var(--danger-300); }
+[data-style="neuro"][data-mode="dark"] .badge-warning  { color: var(--warning-300); }
+[data-style="neuro"][data-mode="dark"] .badge-info     { color: var(--info-300); }
+
+/* Modal */
+[data-style="neuro"] .modal   { background: var(--nm-bg); border-radius: var(--radius-2xl); box-shadow: 20px 20px 40px var(--nm-shadow-dark), -20px -20px 40px var(--nm-shadow-light); }
+[data-style="neuro"] .overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--nm-shadow-dark) 60%, transparent); z-index: var(--z-overlay); backdrop-filter: blur(2px); }
+
+/* Dividers — un simple filet de lumière/ombre, pas de couleur pleine */
+[data-style="neuro"] .divider          { height: 1px; background: transparent; box-shadow: 0 1px 0 var(--nm-shadow-light), 0 -1px 0 var(--nm-shadow-dark); }
+[data-style="neuro"] .divider-vertical { width: 1px;  background: transparent; box-shadow: 1px 0 0 var(--nm-shadow-light), -1px 0 0 var(--nm-shadow-dark); }
+
+/* Bg */
+[data-style="neuro"] .bg { background: var(--nm-bg); }
+
+/* NOTE : pas d'utilitaires .shadow-* génériques ici. En neumorphisme,
+   l'ombre n'a de sens que par PAIRE et collée à --nm-bg (cf. .surface,
+   .btn, .input ci-dessus) — l'appliquer isolément sur un fond
+   arbitraire casserait l'illusion de matière. Utilise .surface /
+   .surface-inset plutôt qu'une classe .shadow-* générique. */
+
+/* Scrollbar */
+[data-style="neuro"] ::-webkit-scrollbar { width: 6px; }
+[data-style="neuro"] ::-webkit-scrollbar-track { background: var(--nm-bg); box-shadow: inset 2px 2px 4px var(--nm-shadow-dark), inset -2px -2px 4px var(--nm-shadow-light); }
+[data-style="neuro"] ::-webkit-scrollbar-thumb { background: linear-gradient(var(--nm-shadow-dark), var(--nm-shadow-light)); border-radius: var(--radius-full); }

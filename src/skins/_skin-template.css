@@ -1,0 +1,132 @@
+/* ============================================================
+   JANGSANG — Skin template
+   Copy this file, rename it, replace "your-skin-name" everywhere.
+   Full guide: docs/08-create-a-skin.md
+
+   RULES:
+   - Scope every selector to [data-style="your-skin-name"]
+   - Visual properties only: background, color, border,
+     border-radius, box-shadow, filter, backdrop-filter,
+     text-shadow, opacity, transition (colors/shadow/border)
+   - No layout properties: width, height, padding, margin,
+     display, flex-*, grid-*, font-size, font-family
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   PALETTE — 3 seed variables, everything derives from these
+---------------------------------------------------------- */
+[data-style="your-skin-name"] {
+  --palette-primary:   #3B82F6;
+  --palette-secondary: #10B981;
+  --palette-neutral:   #64748B;
+}
+
+[data-style="your-skin-name"][data-mode="dark"] {
+  /* override only what changes in dark mode */
+}
+
+
+/* ----------------------------------------------------------
+   PAGE BACKGROUND
+---------------------------------------------------------- */
+[data-style="your-skin-name"][data-mode="light"] { background: ; }
+[data-style="your-skin-name"][data-mode="dark"]  { background: ; }
+
+
+/* ----------------------------------------------------------
+   SURFACE
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .surface {
+  background:    ;
+  border:        ;
+  border-radius: ;
+  box-shadow:    ;
+}
+
+
+/* ----------------------------------------------------------
+   TEXT
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .text-heading { color: ; }
+[data-style="your-skin-name"] .text-body    { color: ; }
+[data-style="your-skin-name"] .text-label   { color: ; text-transform: uppercase; }
+
+
+/* ----------------------------------------------------------
+   BUTTONS
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .btn              { transition: ; }
+[data-style="your-skin-name"] .btn-primary      { background: ; color: ; }
+[data-style="your-skin-name"] .btn-primary:hover { background: ; }
+[data-style="your-skin-name"] .btn-secondary    { background: ; color: ; border: ; }
+[data-style="your-skin-name"] .btn-secondary:hover { background: ; }
+[data-style="your-skin-name"] .btn-outline      { background: transparent; color: ; border: ; }
+[data-style="your-skin-name"] .btn-outline:hover { background: ; }
+[data-style="your-skin-name"] .btn-ghost        { background: transparent; color: ; }
+[data-style="your-skin-name"] .btn-ghost:hover  { background: ; color: ; }
+
+
+/* ----------------------------------------------------------
+   INPUT
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .input              { background: ; border: ; color: ; border-radius: ; transition: ; }
+[data-style="your-skin-name"] .input::placeholder { color: ; }
+[data-style="your-skin-name"] .input:hover        { border-color: ; }
+[data-style="your-skin-name"] .input:focus        { outline: none; border-color: ; box-shadow: ; }
+[data-style="your-skin-name"] .input.error        { border-color: ; }
+
+
+/* ----------------------------------------------------------
+   ICONS
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .icon         { color: ; }
+[data-style="your-skin-name"] .icon-brand   { color: ; }
+[data-style="your-skin-name"] .icon-accent  { color: ; }
+[data-style="your-skin-name"] .icon-success { color: ; }
+[data-style="your-skin-name"] .icon-danger  { color: ; }
+
+
+/* ----------------------------------------------------------
+   BADGES
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .badge           { border-radius: var(--radius-full); }
+[data-style="your-skin-name"] .badge-primary   { background: ; color: ; }
+[data-style="your-skin-name"] .badge-secondary { background: ; color: ; }
+[data-style="your-skin-name"] .badge-success   { background: ; color: ; }
+[data-style="your-skin-name"] .badge-danger    { background: ; color: ; }
+[data-style="your-skin-name"] .badge-warning   { background: ; color: ; }
+[data-style="your-skin-name"] .badge-info      { background: ; color: ; }
+[data-style="your-skin-name"] .badge-neutral   { background: ; color: ; }
+
+
+/* ----------------------------------------------------------
+   MODAL & OVERLAY
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .modal {
+  background:    ;
+  border:        ;
+  border-radius: ;
+  box-shadow:    ;
+}
+[data-style="your-skin-name"] .overlay {
+  position: fixed;
+  inset: 0;
+  background:      ;
+  z-index:         var(--z-overlay);
+}
+
+
+/* ----------------------------------------------------------
+   DIVIDERS
+---------------------------------------------------------- */
+[data-style="your-skin-name"] .divider          { height: 1px; background: ; }
+[data-style="your-skin-name"] .divider-vertical { width:  1px; background: ; }
+
+
+/* ----------------------------------------------------------
+   SCROLLBAR
+---------------------------------------------------------- */
+[data-style="your-skin-name"] ::-webkit-scrollbar       { width: 6px; }
+[data-style="your-skin-name"] ::-webkit-scrollbar-track { background: ; }
+[data-style="your-skin-name"] ::-webkit-scrollbar-thumb { background: ; border-radius: var(--radius-full); }
+[data-style="your-skin-name"] ::-webkit-scrollbar-thumb:hover { background: ; }
