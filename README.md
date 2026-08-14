@@ -1,10 +1,18 @@
 <p align="center">
-  <img src="branding/logo-on-dark.svg" alt="Jangsang logo" width="150" height="150"/>
+  <img src="branding/logo-on-dark.svg" alt="Jangsang logo" width="96" height="96"/>
 </p>
 
 <h1 align="center">Jangsang</h1>
 
-<p align="center"><strong>A two-layer CSS framework. One file for layout. One file for your visual skin.</strong></p>
+<p align="center"><strong>Build once. Reskin forever.</strong></p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/jangsang"><img src="https://img.shields.io/npm/v/jangsang?color=FF6B00&labelColor=111" alt="npm version"></a>
+  <a href="https://github.com/garniloy/jangsang/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-FF6B00?labelColor=111" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/CSS_only-no_JS-FF6B00?labelColor=111" alt="CSS only">
+</p>
+
+---
 
 Jangsang separates structure from appearance. Your layout never changes when you swap a skin. Your skin never breaks when you change layout. Switch from glassmorphism to neumorphism to flat design by changing a single HTML attribute.
 
@@ -20,10 +28,10 @@ npm install jangsang
 **CDN** — no install needed, paste into your `<head>`:
 ```html
 <!-- Layout (always required) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garnilo/jangsang@v1.0.0/src/layout.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garniloy/jangsang@v1.0.0/src/layout.css">
 
 <!-- Pick ONE skin -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garnilo/jangsang@v1.0.0/src/skins/glass.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garniloy/jangsang@v1.0.0/src/skins/glass.css">
 ```
 
 ---
@@ -73,36 +81,57 @@ Switch skin by changing `data-style`. Switch mode with `data-mode`. Both can be 
 
 ---
 
-## Reskin with 3 variables
+## Reskin with 2 variables
 
-Every skin derives its entire color system from 3 seed variables. To use your own brand colors, override them on `:root` (or on any scoped element) **after** loading the skin:
+Every skin derives its entire color system from palette variables. To apply your brand colors, override them **after** loading the skin — in your own CSS file or in a `<style>` tag:
 
 ```css
-/* your-palette.css */
+/* Override on the skin selector, after loading the skin */
 [data-style="glass"] {
-  --palette-primary:   #8B5CF6; /* violet */
-  --palette-secondary: #EC4899; /* pink   */
-  --palette-neutral:   #6B7280; /* gray   */
+  --palette-primary:   #FF6B00; /* your brand color  */
+  --palette-secondary: #8B5CF6; /* your accent color */
 }
 ```
 
-That's all. Every component in the skin — buttons, badges, inputs, glows, gradients — updates automatically.
+That's all. Every component in the skin — buttons, badges, inputs, glows, focus rings, gradients — updates automatically via `color-mix()`. No rebuild required.
+
+Each skin exposes these variables:
+
+| Variable | Role |
+|---|---|
+| `--palette-primary` | Brand color — CTAs, links, focus rings |
+| `--palette-secondary` | Accent — secondary signals, badges |
+| `--palette-neutral` | Reference for all grays and muted tones |
+| `--palette-success` | Success states |
+| `--palette-danger` | Error / destructive states |
+| `--palette-warning` | Warning states |
+| `--palette-info` | Informational states |
+
+You only need to override `--palette-primary` and `--palette-secondary` for a full rebrand. The rest default to sensible values.
 
 ---
 
 ## Usage from npm
 
-```js
-/* In your CSS / PostCSS / bundler entry */
-@import 'jangsang/layout';
-@import 'jangsang/skin/glow';
+```bash
+npm install jangsang
 ```
 
-Or with a bundler that resolves `node_modules`:
+Then in your CSS entry point (works with Vite, Webpack, Next.js, Astro, Svelte…):
+
 ```css
-@import 'jangsang/src/layout.css';
-@import 'jangsang/src/skins/glow.css';
+@import 'jangsang';            /* layout layer */
+@import 'jangsang/skin/glow';  /* pick a skin  */
 ```
+
+Or in JavaScript / TypeScript (React, Vue, Next.js…):
+
+```js
+import 'jangsang';
+import 'jangsang/skin/glass';
+```
+
+> **Bundler note:** Jangsang declares `sideEffects: ["*.css"]` in its `package.json`. This tells Webpack and Vite not to drop CSS imports during tree-shaking.
 
 ---
 

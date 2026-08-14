@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jangsang — Custom palette</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garniloy/jangsang@v1.0.1/src/layout.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garniloy/jangsang@v1.0.1/src/skins/flat.css">
+
+  <style>
+    /*
+      CUSTOM PALETTE
+      ─────────────────────────────────────────────────────
+      Override --palette-primary and --palette-secondary
+      on the skin selector, AFTER loading the skin CSS.
+      Every component — buttons, badges, inputs, borders,
+      focus rings — updates automatically via color-mix().
+
+      You only need to touch these 2–3 variables.
+      Everything else is derived automatically.
+      ─────────────────────────────────────────────────────
+    */
+    [data-style="flat"] {
+      --palette-primary:   #FF6B00;   /* your brand color  */
+      --palette-secondary: #8B5CF6;   /* your accent color */
+      /* --palette-neutral: #64748B;  optional — defaults to the skin value */
+    }
+
+    body { padding: 2rem; }
+  </style>
+</head>
+
+<body data-style="flat" data-mode="light">
+
+  <div class="col gap-lg" style="max-width: 480px; margin: 0 auto;">
+
+    <div class="col gap-sm">
+      <h1 class="text-heading text-2xl">Custom palette</h1>
+      <p class="text-body text-sm">
+        Two variables. Every component updated.
+        This is the flat skin with an orange + violet palette.
+      </p>
+    </div>
+
+    <div class="surface col gap-md p-lg">
+      <div class="row wrap gap-sm">
+        <span class="badge badge-primary">primary</span>
+        <span class="badge badge-secondary">secondary</span>
+        <span class="badge badge-success">success</span>
+        <span class="badge badge-danger">danger</span>
+      </div>
+      <div class="row gap-sm">
+        <button class="btn btn-primary text-sm">Primary</button>
+        <button class="btn btn-outline text-sm">Outline</button>
+        <button class="btn btn-ghost text-sm">Ghost</button>
+      </div>
+      <input class="input text-sm" type="text" placeholder="Focus to see the ring color…">
+    </div>
+
+    <p class="text-muted text-xs">
+      To apply your own palette, add this to your CSS after loading the skin:
+    </p>
+    <pre class="surface p-md text-xs font-mono" style="overflow-x:auto"><code>[data-style="flat"] {
+  --palette-primary:   #FF6B00;
+  --palette-secondary: #8B5CF6;
+}</code></pre>
+
+  </div>
+
+</body>
+</html>

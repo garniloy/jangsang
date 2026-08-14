@@ -1,6 +1,6 @@
 {
   "name": "jangsang",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A two-layer CSS framework: one file for layout, one file for your visual skin. Swap skins by changing a single data-attribute.",
   "keywords": [
     "css",
@@ -14,7 +14,7 @@
     "glow",
     "flat"
   ],
-  "author": "Garnilo Yemte",
+  "author": "Garnilo",
   "license": "MIT",
   "homepage": "https://github.com/garniloy/jangsang#readme",
   "repository": {
@@ -24,21 +24,26 @@
   "bugs": {
     "url": "https://github.com/garniloy/jangsang/issues"
   },
-  "main": "src/layout.css",
-  "style": "src/layout.css",
+  "style": "./src/layout.css",
   "files": [
     "src/",
     "docs/",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": [
+    "*.css",
+    "**/*.css"
   ],
   "exports": {
-    "./layout":          "./src/layout.css",
-    "./skin/flat":       "./src/skins/flat.css",
-    "./skin/material":   "./src/skins/material.css",
-    "./skin/glow":       "./src/skins/glow.css",
-    "./skin/glass":      "./src/skins/glass.css",
-    "./skin/neuro":      "./src/skins/neuro.css",
-    "./skin/all":        "./src/skins/all.css"
+    ".":               "./src/layout.css",
+    "./layout":        "./src/layout.css",
+    "./skin/flat":     "./src/skins/flat.css",
+    "./skin/material": "./src/skins/material.css",
+    "./skin/glow":     "./src/skins/glow.css",
+    "./skin/glass":    "./src/skins/glass.css",
+    "./skin/neuro":    "./src/skins/neuro.css",
+    "./skin/all":      "./src/skins/all.css"
   }
 }

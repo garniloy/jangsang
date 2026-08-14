@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jangsang — Example</title>
+
+  <!-- 1. Layout layer (always first) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garniloy/jangsang@v1.0.1/src/layout.css">
+
+  <!-- 2. Pick ONE skin — swap this line to change everything -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/garniloy/jangsang@v1.0.1/src/skins/glass.css">
+
+  <style>
+    /* Optional: override the skin palette with your own brand colors */
+    [data-style="glass"] {
+      --palette-primary:   #FF6B00;
+      --palette-secondary: #10B981;
+    }
+
+    body { padding: 2rem; }
+  </style>
+</head>
+
+<!--
+  data-style  → picks the skin   (flat | material | glow | glass | neuro)
+  data-mode   → light or dark     (can be set on any ancestor element)
+-->
+<body data-style="glass" data-mode="dark">
+
+  <div class="col gap-xl" style="max-width: 640px; margin: 0 auto;">
+
+    <!-- Header -->
+    <header class="row justify-between align-center">
+      <span class="text-heading text-xl weight-bold">Jangsang</span>
+      <div class="row gap-sm">
+        <button class="btn btn-ghost text-sm">Docs</button>
+        <button class="btn btn-primary text-sm">Get started</button>
+      </div>
+    </header>
+
+    <div class="divider h-divider-xl"></div>
+
+    <!-- Card / surface -->
+    <section class="surface col gap-lg p-lg">
+      <div class="col gap-sm">
+        <span class="text-label text-xs">Quick start</span>
+        <h1 class="text-heading text-2xl">Build once. Reskin forever.</h1>
+        <p class="text-body text-sm">
+          Swap skins by changing a single attribute.
+          Your layout never breaks. Your content never moves.
+        </p>
+      </div>
+
+      <!-- Badges -->
+      <div class="row wrap gap-sm">
+        <span class="badge badge-primary">v1.0.1</span>
+        <span class="badge badge-success">MIT</span>
+        <span class="badge badge-info">CSS only</span>
+        <span class="badge badge-neutral">No JS required</span>
+      </div>
+
+      <!-- Input -->
+      <div class="col gap-sm">
+        <label class="text-label text-xs">Install</label>
+        <input class="input text-sm" type="text" value="npm install jangsang" readonly>
+      </div>
+
+      <!-- Buttons -->
+      <div class="row wrap gap-sm">
+        <button class="btn btn-primary text-sm">Primary</button>
+        <button class="btn btn-secondary text-sm">Secondary</button>
+        <button class="btn btn-outline text-sm">Outline</button>
+        <button class="btn btn-ghost text-sm">Ghost</button>
+      </div>
+    </section>
+
+    <!-- Grid example -->
+    <div class="grid-3 gap-md">
+      <div class="surface p-md col gap-sm">
+        <span class="icon-brand text-xl">⚡</span>
+        <span class="text-heading text-sm weight-semibold">Performance</span>
+        <span class="text-body text-xs">Pure CSS. Zero runtime.</span>
+      </div>
+      <div class="surface p-md col gap-sm">
+        <span class="icon-brand text-xl">🎨</span>
+        <span class="text-heading text-sm weight-semibold">5 skins</span>
+        <span class="text-body text-xs">Flat, Material, Glow, Glass, Neuro.</span>
+      </div>
+      <div class="surface p-md col gap-sm">
+        <span class="icon-brand text-xl">🔧</span>
+        <span class="text-heading text-sm weight-semibold">Customizable</span>
+        <span class="text-body text-xs">3 variables to reskin everything.</span>
+      </div>
+    </div>
+
+    <!-- Dark/light toggle demo -->
+    <div class="row justify-center gap-md">
+      <button class="btn btn-outline text-sm" onclick="document.body.dataset.mode='light'">Light mode</button>
+      <button class="btn btn-outline text-sm" onclick="document.body.dataset.mode='dark'">Dark mode</button>
+    </div>
+
+    <!-- Skin switcher demo -->
+    <div class="row justify-center wrap gap-sm">
+      <button class="btn btn-ghost text-xs" onclick="document.body.dataset.style='flat'">flat</button>
+      <button class="btn btn-ghost text-xs" onclick="document.body.dataset.style='material'">material</button>
+      <button class="btn btn-ghost text-xs" onclick="document.body.dataset.style='glow'">glow</button>
+      <button class="btn btn-ghost text-xs" onclick="document.body.dataset.style='glass'">glass</button>
+      <button class="btn btn-ghost text-xs" onclick="document.body.dataset.style='neuro'">neuro</button>
+    </div>
+
+  </div>
+
+</body>
+</html>
